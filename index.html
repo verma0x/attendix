@@ -8,15 +8,25 @@
 
 <style>
 
+/* =========================================
+   RESET
+========================================= */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
+
+/* =========================================
+   LIGHT THEME
+========================================= */
+
 :root {
+
     --bg: #f7f7fb;
-    --white: #ffffff;
+    --card: #ffffff;
     --text: #171820;
     --muted: #8c8d9b;
 
@@ -30,11 +40,47 @@
     --red-soft: #fdecec;
 
     --border: #ececf2;
+
+    --soft: #f5f4fa;
 }
 
+
+/* =========================================
+   DARK THEME
+========================================= */
+
+body.dark {
+
+    --bg: #0f1016;
+    --card: #181922;
+    --text: #f4f4f7;
+    --muted: #9294a3;
+
+    --purple: #8275f5;
+    --purple-soft: rgba(130, 117, 245, 0.12);
+
+    --green: #3bc98b;
+    --green-soft: rgba(59, 201, 139, 0.13);
+
+    --red: #ff7070;
+    --red-soft: rgba(255, 112, 112, 0.13);
+
+    --border: #292b36;
+
+    --soft: #22232d;
+}
+
+
+/* =========================================
+   BODY
+========================================= */
+
 body {
+
     min-height: 100vh;
+
     background: var(--bg);
+
     color: var(--text);
 
     font-family:
@@ -42,50 +88,74 @@ body {
         BlinkMacSystemFont,
         "Segoe UI",
         sans-serif;
+
+    transition:
+        background 0.25s ease,
+        color 0.25s ease;
 }
 
+
+/* =========================================
+   APP
+========================================= */
+
 .app {
+
     width: 100%;
+
     max-width: 480px;
 
     margin: auto;
 
-    padding: 20px 16px 100px;
+    padding:
+        20px 16px 100px;
 }
 
 
-/* =========================
+/* =========================================
    HEADER
-========================= */
+========================================= */
 
 header {
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     margin-bottom: 20px;
 }
 
+
 .brand {
+
     display: flex;
+
     align-items: center;
+
     gap: 11px;
 }
 
+
 .logo {
+
     width: 45px;
     height: 45px;
 
     display: flex;
+
     align-items: center;
     justify-content: center;
 
     border-radius: 15px;
 
     background: var(--purple);
+
     color: white;
 
     font-size: 22px;
+
     font-weight: 900;
 
     box-shadow:
@@ -93,77 +163,122 @@ header {
         rgba(102, 87, 232, 0.25);
 }
 
+
 .brand h1 {
+
     font-size: 23px;
+
     letter-spacing: -0.5px;
 }
 
+
 .brand p {
+
     margin-top: 2px;
 
     color: var(--muted);
+
     font-size: 10px;
 }
 
-.today-btn {
-    width: 40px;
-    height: 40px;
 
-    border: 1px solid var(--border);
+/* =========================================
+   HEADER BUTTONS
+========================================= */
 
-    border-radius: 13px;
+.header-buttons {
 
-    background: white;
+    display: flex;
 
-    color: var(--purple);
-
-    font-size: 18px;
-
-    cursor: pointer;
+    gap: 7px;
 }
 
 
-/* =========================
+.header-btn {
+
+    width: 40px;
+    height: 40px;
+
+    border:
+        1px solid var(--border);
+
+    border-radius: 13px;
+
+    background: var(--card);
+
+    color: var(--purple);
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.header-btn:active {
+
+    transform: scale(0.9);
+}
+
+
+/* =========================================
    CARD
-========================= */
+========================================= */
 
 .card {
-    background: white;
 
-    border: 1px solid var(--border);
+    background: var(--card);
+
+    border:
+        1px solid var(--border);
 
     border-radius: 22px;
 
     box-shadow:
         0 10px 30px
         rgba(30, 28, 70, 0.06);
+
+    transition:
+        background 0.25s ease,
+        border 0.25s ease;
 }
 
 
-/* =========================
+/* =========================================
    CALENDAR CARD
-========================= */
+========================================= */
 
 .calendar-card {
+
     padding: 18px;
 
     margin-bottom: 15px;
 }
 
+
 .calendar-top {
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
 
     margin-bottom: 20px;
 }
 
+
 .month {
+
     font-size: 18px;
+
     font-weight: 800;
 }
 
+
 .year {
+
     display: block;
 
     margin-top: 2px;
@@ -173,12 +288,17 @@ header {
     font-size: 10px;
 }
 
+
 .month-controls {
+
     display: flex;
+
     gap: 5px;
 }
 
+
 .month-controls button {
+
     width: 35px;
     height: 35px;
 
@@ -186,7 +306,9 @@ header {
 
     border-radius: 10px;
 
-    background: #f5f4fa;
+    background: var(--soft);
+
+    color: var(--text);
 
     font-size: 18px;
 
@@ -194,11 +316,12 @@ header {
 }
 
 
-/* =========================
-   WEEKDAYS
-========================= */
+/* =========================================
+   WEEK DAYS
+========================================= */
 
 .weekdays {
+
     display: grid;
 
     grid-template-columns:
@@ -209,10 +332,12 @@ header {
     margin-bottom: 6px;
 }
 
+
 .weekdays div {
+
     text-align: center;
 
-    color: #a0a2ad;
+    color: var(--muted);
 
     font-size: 9px;
 
@@ -220,11 +345,12 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    CALENDAR
-========================= */
+========================================= */
 
 .calendar {
+
     display: grid;
 
     grid-template-columns:
@@ -234,26 +360,30 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    DAY WRAPPER
-========================= */
+========================================= */
 
 .day-wrapper {
+
     position: relative;
 
     min-width: 0;
 
     display: flex;
+
     justify-content: center;
 }
 
 
-/* =========================
+/* =========================================
    DAY
-========================= */
+========================================= */
 
 .day {
+
     width: 100%;
+
     height: 48px;
 
     border: none;
@@ -265,6 +395,7 @@ header {
     color: var(--text);
 
     font-size: 12px;
+
     font-weight: 750;
 
     cursor: pointer;
@@ -274,16 +405,19 @@ header {
     transition: 0.15s;
 }
 
+
 .day:active {
+
     transform: scale(0.92);
 }
 
 
-/* =========================
+/* =========================================
    TODAY
-========================= */
+========================================= */
 
 .day.today {
+
     background:
         rgba(102, 87, 232, 0.08);
 
@@ -295,33 +429,36 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    PRESENT
-========================= */
+========================================= */
 
 .day.present {
+
     background: var(--green-soft);
 
-    color: #168258;
+    color: var(--green);
 }
 
 
-/* =========================
+/* =========================================
    ABSENT
-========================= */
+========================================= */
 
 .day.absent {
+
     background: var(--red-soft);
 
-    color: #b73737;
+    color: var(--red);
 }
 
 
-/* =========================
+/* =========================================
    SELECTED
-========================= */
+========================================= */
 
 .day.selected {
+
     box-shadow:
         inset 0 0 0 2px var(--purple);
 
@@ -330,28 +467,34 @@ header {
     z-index: 10;
 }
 
+
 .day.selected.present {
+
     box-shadow:
         inset 0 0 0 2px var(--green);
 }
 
+
 .day.selected.absent {
+
     box-shadow:
         inset 0 0 0 2px var(--red);
 }
 
 
-/* =========================
+/* =========================================
    STATUS DOT
-========================= */
+========================================= */
 
 .status-dot {
+
     position: absolute;
 
     width: 5px;
     height: 5px;
 
     bottom: 5px;
+
     left: 50%;
 
     transform:
@@ -360,20 +503,25 @@ header {
     border-radius: 50%;
 }
 
+
 .day.present .status-dot {
+
     background: var(--green);
 }
 
+
 .day.absent .status-dot {
+
     background: var(--red);
 }
 
 
-/* =========================
+/* =========================================
    ATTENDANCE POPUP
-========================= */
+========================================= */
 
 .attendance-popup {
+
     position: absolute;
 
     top: 53px;
@@ -391,7 +539,7 @@ header {
 
     padding: 5px;
 
-    background: white;
+    background: var(--card);
 
     border:
         1px solid var(--border);
@@ -400,13 +548,13 @@ header {
 
     box-shadow:
         0 8px 25px
-        rgba(30, 28, 70, 0.15);
+        rgba(0,0,0,0.18);
 }
 
 
-/* SHOW POPUP */
+.day-wrapper.active
+.attendance-popup {
 
-.day-wrapper.active .attendance-popup {
     display: flex;
 
     gap: 4px;
@@ -419,7 +567,9 @@ header {
 @keyframes popupIn {
 
     from {
+
         opacity: 0;
+
         transform:
             translateX(-50%)
             translateY(-4px)
@@ -427,21 +577,23 @@ header {
     }
 
     to {
+
         opacity: 1;
+
         transform:
             translateX(-50%)
             translateY(0)
             scale(1);
     }
-
 }
 
 
-/* =========================
+/* =========================================
    POPUP BUTTONS
-========================= */
+========================================= */
 
 .attendance-popup button {
+
     flex: 1;
 
     border: none;
@@ -457,24 +609,29 @@ header {
     cursor: pointer;
 }
 
+
 .popup-present {
+
     background: var(--green-soft);
 
-    color: #168258;
+    color: var(--green);
 }
+
 
 .popup-absent {
+
     background: var(--red-soft);
 
-    color: #b73737;
+    color: var(--red);
 }
 
 
-/* =========================
+/* =========================================
    LEGEND
-========================= */
+========================================= */
 
 .legend {
+
     display: flex;
 
     justify-content: center;
@@ -488,7 +645,9 @@ header {
     font-size: 10px;
 }
 
+
 .legend-dot {
+
     display: inline-block;
 
     width: 7px;
@@ -499,24 +658,31 @@ header {
     border-radius: 50%;
 }
 
+
 .legend-green {
+
     background: var(--green);
 }
 
+
 .legend-red {
+
     background: var(--red);
 }
 
 
-/* =========================
+/* =========================================
    ATTENDANCE CARD
-========================= */
+========================================= */
 
 .attendance-card {
+
     padding: 20px;
 }
 
+
 .attendance-header {
+
     display: flex;
 
     align-items: flex-start;
@@ -524,7 +690,9 @@ header {
     justify-content: space-between;
 }
 
+
 .label {
+
     color: var(--muted);
 
     font-size: 9px;
@@ -536,7 +704,9 @@ header {
     letter-spacing: 1px;
 }
 
+
 .percentage {
+
     margin-top: 5px;
 
     font-size: 43px;
@@ -546,7 +716,9 @@ header {
     letter-spacing: -2px;
 }
 
+
 .percentage span {
+
     color: var(--muted);
 
     font-size: 18px;
@@ -555,11 +727,12 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    STATUS
-========================= */
+========================================= */
 
 .status {
+
     padding: 8px 10px;
 
     border-radius: 10px;
@@ -569,39 +742,60 @@ header {
     font-weight: 850;
 }
 
+
 .safe {
+
     background: var(--green-soft);
-    color: #168258;
+
+    color: var(--green);
 }
 
+
 .warning {
+
     background: #fff5dd;
+
     color: #a87816;
 }
 
-.danger {
-    background: var(--red-soft);
-    color: #b73737;
+
+body.dark .warning {
+
+    background:
+        rgba(255, 190, 60, 0.12);
+
+    color: #ffc85c;
 }
 
 
-/* =========================
+.danger {
+
+    background: var(--red-soft);
+
+    color: var(--red);
+}
+
+
+/* =========================================
    PROGRESS
-========================= */
+========================================= */
 
 .progress {
+
     height: 9px;
 
     margin: 15px 0;
 
-    background: #f0f0f4;
+    background: var(--soft);
 
     border-radius: 100px;
 
     overflow: hidden;
 }
 
+
 .progress-fill {
+
     height: 100%;
 
     width: 0%;
@@ -615,11 +809,12 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    COUNTERS
-========================= */
+========================================= */
 
 .counters {
+
     display: grid;
 
     grid-template-columns:
@@ -628,10 +823,12 @@ header {
     gap: 9px;
 }
 
+
 .counter {
+
     padding: 12px;
 
-    background: #fafafd;
+    background: var(--soft);
 
     border:
         1px solid var(--border);
@@ -639,32 +836,36 @@ header {
     border-radius: 13px;
 }
 
+
 .counter strong {
+
     display: block;
 
     font-size: 18px;
 }
 
+
 .counter span {
+
     color: var(--muted);
 
     font-size: 9px;
 }
 
 
-/* =========================
+/* =========================================
    TIP
-========================= */
+========================================= */
 
 .tip {
+
     margin-top: 12px;
 
     padding: 11px 12px;
 
-    background:
-        var(--purple-soft);
+    background: var(--purple-soft);
 
-    color: #5648bd;
+    color: var(--purple);
 
     border-radius: 13px;
 
@@ -676,11 +877,12 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    RESET
-========================= */
+========================================= */
 
 .reset {
+
     width: 100%;
 
     margin-top: 14px;
@@ -692,7 +894,7 @@ header {
 
     border-radius: 11px;
 
-    background: white;
+    background: var(--card);
 
     color: var(--muted);
 
@@ -704,20 +906,23 @@ header {
 }
 
 
-/* =========================
+/* =========================================
    BOTTOM NAV
-========================= */
+========================================= */
 
 .bottom-nav {
+
     position: fixed;
 
     left: 50%;
+
     bottom: 0;
 
     transform:
         translateX(-50%);
 
-    width: min(480px, 100%);
+    width:
+        min(480px, 100%);
 
     padding:
         10px 20px
@@ -727,7 +932,11 @@ header {
         );
 
     background:
-        rgba(255,255,255,0.95);
+        color-mix(
+            in srgb,
+            var(--card) 95%,
+            transparent
+        );
 
     backdrop-filter:
         blur(15px);
@@ -738,48 +947,57 @@ header {
     z-index: 100;
 }
 
+
 .nav {
+
     display: flex;
 
     justify-content:
         space-around;
 }
 
+
 .nav-item {
+
     text-align: center;
 
-    color: #9b9daa;
+    color: var(--muted);
 
     font-size: 9px;
 
     font-weight: 750;
 }
 
+
 .nav-icon {
+
     margin-bottom: 3px;
 
     font-size: 18px;
 }
 
+
 .nav-item.active {
+
     color: var(--purple);
 }
 
 
-/* =========================
-   MOBILE EDGE FIX
-========================= */
+/* =========================================
+   MOBILE
+========================================= */
 
 @media (max-width: 360px) {
 
     .attendance-popup {
+
         width: 100px;
     }
 
     .attendance-popup button {
+
         font-size: 8px;
     }
-
 }
 
 </style>
@@ -792,9 +1010,9 @@ header {
 <div class="app">
 
 
-<!-- =========================
+<!-- =====================================
      HEADER
-========================= -->
+===================================== -->
 
 <header>
 
@@ -819,21 +1037,42 @@ header {
     </div>
 
 
-    <button
-        class="today-btn"
-        id="todayButton">
+    <div class="header-buttons">
 
-        ⌾
 
-    </button>
+        <!-- TODAY -->
+
+        <button
+            class="header-btn"
+            id="todayButton"
+            title="Today">
+
+            ⌾
+
+        </button>
+
+
+        <!-- DARK MODE -->
+
+        <button
+            class="header-btn"
+            id="themeButton"
+            title="Toggle theme">
+
+            🌙
+
+        </button>
+
+
+    </div>
 
 </header>
 
 
 
-<!-- =========================
+<!-- =====================================
      CALENDAR
-========================= -->
+===================================== -->
 
 <section
     class="card calendar-card">
@@ -878,12 +1117,11 @@ header {
 
         </div>
 
-
     </div>
 
 
 
-    <!-- WEEKDAYS -->
+    <!-- WEEK DAYS -->
 
     <div class="weekdays">
 
@@ -940,9 +1178,9 @@ header {
 
 
 
-<!-- =========================
+<!-- =====================================
      ATTENDANCE SUMMARY
-========================= -->
+===================================== -->
 
 <section
     class="card attendance-card">
@@ -992,6 +1230,7 @@ header {
         <div
             class="progress-fill"
             id="progressFill">
+
         </div>
 
     </div>
@@ -1039,6 +1278,8 @@ header {
 
 
 
+    <!-- TIP -->
+
     <div
         class="tip"
         id="tip">
@@ -1048,6 +1289,9 @@ header {
 
     </div>
 
+
+
+    <!-- RESET -->
 
     <button
         class="reset"
@@ -1065,9 +1309,9 @@ header {
 
 
 
-<!-- =========================
+<!-- =====================================
      BOTTOM NAV
-========================= -->
+===================================== -->
 
 <nav class="bottom-nav">
 
@@ -1118,13 +1362,20 @@ header {
 
 <script>
 
-/* =========================
+/* =========================================
    STORAGE
-========================= */
+========================================= */
 
 const STORAGE_KEY =
     "attendixAttendance";
 
+const THEME_KEY =
+    "attendixTheme";
+
+
+/* =========================================
+   DATA
+========================================= */
 
 let attendance =
     JSON.parse(
@@ -1143,9 +1394,9 @@ let selectedDate =
 
 
 
-/* =========================
-   ELEMENT
-========================= */
+/* =========================================
+   ELEMENT HELPER
+========================================= */
 
 function $(id) {
 
@@ -1155,9 +1406,9 @@ function $(id) {
 
 
 
-/* =========================
+/* =========================================
    DATE KEY
-========================= */
+========================================= */
 
 function makeKey(
     year,
@@ -1181,9 +1432,9 @@ function makeKey(
 
 
 
-/* =========================
-   SAVE DATA
-========================= */
+/* =========================================
+   SAVE ATTENDANCE
+========================================= */
 
 function saveData() {
 
@@ -1201,9 +1452,9 @@ function saveData() {
 
 
 
-/* =========================
+/* =========================================
    RENDER CALENDAR
-========================= */
+========================================= */
 
 function renderCalendar() {
 
@@ -1214,6 +1465,7 @@ function renderCalendar() {
 
     const month =
         currentDate.getMonth();
+
 
 
     $("monthName")
@@ -1257,7 +1509,9 @@ function renderCalendar() {
 
 
 
-    /* EMPTY CELLS */
+    /* =================================
+       EMPTY CELLS
+    ================================= */
 
     for (
         let i = 0;
@@ -1286,7 +1540,9 @@ function renderCalendar() {
 
 
 
-    /* DAYS */
+    /* =================================
+       DAYS
+    ================================= */
 
     for (
         let day = 1;
@@ -1315,7 +1571,7 @@ function renderCalendar() {
 
 
 
-        /* BUTTON */
+        /* DAY BUTTON */
 
         const button =
             document.createElement(
@@ -1331,7 +1587,9 @@ function renderCalendar() {
 
 
 
-        /* STATUS */
+        /* =================================
+           ATTENDANCE STATUS
+        ================================= */
 
         if (
             attendance[dateKey]
@@ -1360,7 +1618,9 @@ function renderCalendar() {
 
 
 
-        /* TODAY */
+        /* =================================
+           TODAY
+        ================================= */
 
         if (
 
@@ -1387,7 +1647,9 @@ function renderCalendar() {
 
 
 
-        /* SELECTED */
+        /* =================================
+           SELECTED
+        ================================= */
 
         if (
             dateKey ===
@@ -1406,9 +1668,9 @@ function renderCalendar() {
 
 
 
-        /* =====================
+        /* =================================
            POPUP
-        ====================== */
+        ================================= */
 
         const popup =
             document.createElement(
@@ -1420,7 +1682,7 @@ function renderCalendar() {
 
 
 
-        /* PRESENT */
+        /* PRESENT BUTTON */
 
         const present =
             document.createElement(
@@ -1432,7 +1694,6 @@ function renderCalendar() {
 
         present.textContent =
             "✓ Present";
-
 
 
         present.addEventListener(
@@ -1451,7 +1712,7 @@ function renderCalendar() {
 
 
 
-        /* ABSENT */
+        /* ABSENT BUTTON */
 
         const absent =
             document.createElement(
@@ -1463,7 +1724,6 @@ function renderCalendar() {
 
         absent.textContent =
             "✕ Absent";
-
 
 
         absent.addEventListener(
@@ -1492,7 +1752,9 @@ function renderCalendar() {
 
 
 
-        /* ADD */
+        /* =================================
+           ADD ELEMENTS
+        ================================= */
 
         wrapper.appendChild(
             button
@@ -1509,9 +1771,9 @@ function renderCalendar() {
 
 
 
-        /* =====================
+        /* =================================
            DATE CLICK
-        ====================== */
+        ================================= */
 
         button.addEventListener(
             "click",
@@ -1532,25 +1794,22 @@ function renderCalendar() {
 
 
 
-/* =========================
+/* =========================================
    SELECT DATE
-========================= */
+========================================= */
 
 function selectDate(
     dateKey
 ) {
 
-    /*
-       If the same date is tapped
-       again, close the popup.
-    */
 
     if (
         selectedDate ===
         dateKey
     ) {
 
-        selectedDate = null;
+        selectedDate =
+            null;
 
     }
 
@@ -1568,9 +1827,9 @@ function selectDate(
 
 
 
-/* =========================
+/* =========================================
    MARK ATTENDANCE
-========================= */
+========================================= */
 
 function markAttendance(
     dateKey,
@@ -1599,9 +1858,9 @@ function markAttendance(
 
 
 
-/* =========================
-   STATISTICS
-========================= */
+/* =========================================
+   UPDATE STATISTICS
+========================================= */
 
 function updateStatistics() {
 
@@ -1636,7 +1895,9 @@ function updateStatistics() {
         0;
 
 
-    if (total > 0) {
+    if (
+        total > 0
+    ) {
 
         percentage =
             present /
@@ -1646,6 +1907,8 @@ function updateStatistics() {
     }
 
 
+
+    /* COUNTERS */
 
     $("presentCount")
         .textContent =
@@ -1657,6 +1920,8 @@ function updateStatistics() {
         absent;
 
 
+
+    /* PERCENTAGE */
 
     $("percentage")
         .innerHTML =
@@ -1673,11 +1938,15 @@ function updateStatistics() {
 
 
 
+    /* PROGRESS */
+
     $("progressFill")
         .style.width =
         percentage + "%";
 
 
+
+    /* STATUS */
 
     const status =
         $("status");
@@ -1688,7 +1957,9 @@ function updateStatistics() {
 
 
 
-    if (total === 0) {
+    if (
+        total === 0
+    ) {
 
         status.textContent =
             "No data";
@@ -1752,9 +2023,9 @@ function updateStatistics() {
 
 
 
-/* =========================
+/* =========================================
    MONTH CONTROLS
-========================= */
+========================================= */
 
 $("previousMonth")
     .addEventListener(
@@ -1765,7 +2036,8 @@ $("previousMonth")
                 currentDate.getMonth() - 1
             );
 
-            selectedDate = null;
+            selectedDate =
+                null;
 
             renderCalendar();
 
@@ -1782,7 +2054,8 @@ $("nextMonth")
                 currentDate.getMonth() + 1
             );
 
-            selectedDate = null;
+            selectedDate =
+                null;
 
             renderCalendar();
 
@@ -1791,9 +2064,9 @@ $("nextMonth")
 
 
 
-/* =========================
-   TODAY
-========================= */
+/* =========================================
+   TODAY BUTTON
+========================================= */
 
 $("todayButton")
     .addEventListener(
@@ -1803,7 +2076,8 @@ $("todayButton")
             currentDate =
                 new Date();
 
-            selectedDate = null;
+            selectedDate =
+                null;
 
             renderCalendar();
 
@@ -1812,14 +2086,110 @@ $("todayButton")
 
 
 
-/* =========================
-   RESET
-========================= */
+/* =========================================
+   DARK MODE
+========================================= */
+
+function updateThemeIcon() {
+
+    if (
+        document.body.classList.contains(
+            "dark"
+        )
+    ) {
+
+        $("themeButton")
+            .textContent =
+            "☀️";
+
+    }
+
+    else {
+
+        $("themeButton")
+            .textContent =
+            "🌙";
+
+    }
+
+}
+
+
+
+/* =========================================
+   LOAD THEME
+========================================= */
+
+const savedTheme =
+    localStorage.getItem(
+        THEME_KEY
+    );
+
+
+if (
+    savedTheme ===
+    "dark"
+) {
+
+    document.body.classList.add(
+        "dark"
+    );
+
+}
+
+
+updateThemeIcon();
+
+
+
+/* =========================================
+   TOGGLE THEME
+========================================= */
+
+$("themeButton")
+    .addEventListener(
+        "click",
+        function() {
+
+
+            document.body
+                .classList
+                .toggle("dark");
+
+
+            const isDark =
+                document.body
+                    .classList
+                    .contains("dark");
+
+
+            localStorage.setItem(
+
+                THEME_KEY,
+
+                isDark
+                    ? "dark"
+                    : "light"
+
+            );
+
+
+            updateThemeIcon();
+
+        }
+    );
+
+
+
+/* =========================================
+   RESET ATTENDANCE
+========================================= */
 
 $("resetButton")
     .addEventListener(
         "click",
         function() {
+
 
             if (
                 confirm(
@@ -1829,11 +2199,14 @@ $("resetButton")
 
                 attendance = {};
 
-                selectedDate = null;
+                selectedDate =
+                    null;
+
 
                 localStorage.removeItem(
                     STORAGE_KEY
                 );
+
 
                 renderCalendar();
 
@@ -1846,18 +2219,20 @@ $("resetButton")
 
 
 
-/* =========================
-   CLOSE POPUP WHEN
-   CLICKING OUTSIDE
-========================= */
+/* =========================================
+   CLOSE POPUP
+========================================= */
 
 document.addEventListener(
     "click",
     function() {
 
-        if (selectedDate !== null) {
+        if (
+            selectedDate !== null
+        ) {
 
-            selectedDate = null;
+            selectedDate =
+                null;
 
             renderCalendar();
 
@@ -1868,9 +2243,9 @@ document.addEventListener(
 
 
 
-/* =========================
-   START
-========================= */
+/* =========================================
+   START APP
+========================================= */
 
 renderCalendar();
 
