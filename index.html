@@ -2,12 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color"
-      content="#f7f7fb">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f7f7fb">
 
 <title>Attendix</title>
 
@@ -31,11 +27,10 @@
 :root {
     --bg: #f7f7fb;
     --white: #ffffff;
-
     --text: #171820;
-    --muted: #8b8d9b;
+    --muted: #898c9c;
 
-    --border: #e9e9f0;
+    --border: #ececf2;
 
     --purple: #6657e8;
     --purple-light: #eeebff;
@@ -60,6 +55,7 @@ body {
     color: var(--text);
 
     font-family:
+        Inter,
         -apple-system,
         BlinkMacSystemFont,
         "Segoe UI",
@@ -91,11 +87,9 @@ header {
     display: flex;
 
     align-items: center;
-
     justify-content: space-between;
 
-    padding:
-        5px 2px 22px;
+    padding: 5px 2px 22px;
 }
 
 
@@ -124,12 +118,10 @@ header {
     color: white;
 
     font-size: 22px;
-
     font-weight: 900;
 
     box-shadow:
-        0 8px 20px
-        rgba(102, 87, 232, 0.25);
+        0 8px 20px rgba(102, 87, 232, 0.25);
 }
 
 
@@ -179,8 +171,7 @@ header {
     border-radius: 22px;
 
     box-shadow:
-        0 10px 30px
-        rgba(30, 28, 70, 0.06);
+        0 10px 30px rgba(30, 28, 70, 0.06);
 }
 
 
@@ -199,7 +190,6 @@ header {
     display: flex;
 
     align-items: center;
-
     justify-content: space-between;
 
     margin-bottom: 20px;
@@ -252,12 +242,12 @@ header {
 
 
 .month-buttons button:active {
-    transform: scale(0.9);
+    transform: scale(0.92);
 }
 
 
 /* =========================
-   WEEK DAYS
+   WEEKDAYS
 ========================= */
 
 .weekdays,
@@ -312,7 +302,7 @@ header {
 
 
 .day:active {
-    transform: scale(0.90);
+    transform: scale(0.92);
 }
 
 
@@ -323,11 +313,10 @@ header {
 
 /* =========================
    TODAY
-   TRANSPARENT PURPLE
+   Transparent Purple
 ========================= */
 
 .day.today {
-
     background:
         rgba(102, 87, 232, 0.08);
 
@@ -340,7 +329,6 @@ header {
 
 
 .day.today .number {
-
     color: var(--purple);
 
     font-weight: 900;
@@ -352,12 +340,9 @@ header {
 ========================= */
 
 .day.present {
+    background: var(--green-light);
 
-    background:
-        var(--green-light);
-
-    color:
-        #168258;
+    color: #168258;
 }
 
 
@@ -366,12 +351,9 @@ header {
 ========================= */
 
 .day.absent {
+    background: var(--red-light);
 
-    background:
-        var(--red-light);
-
-    color:
-        #b73737;
+    color: #b73737;
 }
 
 
@@ -380,45 +362,33 @@ header {
 ========================= */
 
 .day.selected {
-
     box-shadow:
+        inset 0 0 0 2px var(--purple),
 
-        inset 0 0 0 2px
-        var(--purple),
+        0 4px 10px
+        rgba(102, 87, 232, 0.12);
 
-        0 4px 12px
-        rgba(102, 87, 232, 0.15);
-
-    transform:
-        scale(0.94);
+    transform: scale(0.94);
 }
 
 
-/* SELECTED + PRESENT */
+/* Selected + Present */
 
 .day.selected.present {
-
-    background:
-        var(--green-light);
+    background: var(--green-light);
 
     box-shadow:
-
-        inset 0 0 0 2px
-        var(--green);
+        inset 0 0 0 2px var(--green);
 }
 
 
-/* SELECTED + ABSENT */
+/* Selected + Absent */
 
 .day.selected.absent {
-
-    background:
-        var(--red-light);
+    background: var(--red-light);
 
     box-shadow:
-
-        inset 0 0 0 2px
-        var(--red);
+        inset 0 0 0 2px var(--red);
 }
 
 
@@ -427,18 +397,15 @@ header {
 ========================= */
 
 .status-dot {
-
     position: absolute;
 
     width: 5px;
     height: 5px;
 
     left: 50%;
-
     bottom: 5px;
 
-    transform:
-        translateX(-50%);
+    transform: translateX(-50%);
 
     border-radius: 50%;
 }
@@ -459,7 +426,6 @@ header {
 ========================= */
 
 .legend {
-
     display: flex;
 
     justify-content: center;
@@ -475,7 +441,6 @@ header {
 
 
 .dot {
-
     display: inline-block;
 
     width: 7px;
@@ -500,26 +465,22 @@ header {
 /* =========================
    PRESENT / ABSENT PANEL
 
-   HIDDEN BY DEFAULT
+   Hidden until a date
+   is selected.
 ========================= */
 
 .quick-attendance {
-
     display: none;
 
     margin-top: 16px;
 
     padding-top: 15px;
 
-    border-top:
-        1px solid var(--border);
+    border-top: 1px solid var(--border);
 }
 
 
-/* SHOW AFTER DATE CLICK */
-
 .quick-attendance.show {
-
     display: block;
 
     animation:
@@ -533,7 +494,7 @@ header {
         opacity: 0;
 
         transform:
-            translateY(6px);
+            translateY(5px);
     }
 
     to {
@@ -542,6 +503,7 @@ header {
         transform:
             translateY(0);
     }
+
 }
 
 
@@ -550,11 +512,9 @@ header {
 ========================= */
 
 .selected-info {
-
     display: flex;
 
-    justify-content:
-        space-between;
+    justify-content: space-between;
 
     align-items: center;
 
@@ -565,13 +525,11 @@ header {
 
 
 .selected-info strong {
-
     font-size: 11px;
 }
 
 
 .selected-info span {
-
     color: var(--muted);
 
     font-size: 9px;
@@ -581,11 +539,10 @@ header {
 
 
 /* =========================
-   BUTTONS
+   ATTENDANCE BUTTONS
 ========================= */
 
 .quick-buttons {
-
     display: grid;
 
     grid-template-columns:
@@ -596,7 +553,6 @@ header {
 
 
 .quick-buttons button {
-
     padding: 12px;
 
     border: none;
@@ -614,38 +570,29 @@ header {
 
 
 .quick-buttons button:active {
-
-    transform:
-        scale(0.96);
+    transform: scale(0.96);
 }
 
 
 .quick-present {
+    background: var(--green-light);
 
-    background:
-        var(--green-light);
-
-    color:
-        #168258;
+    color: #168258;
 }
 
 
 .quick-absent {
+    background: var(--red-light);
 
-    background:
-        var(--red-light);
-
-    color:
-        #b73737;
+    color: #b73737;
 }
 
 
 /* =========================
-   ATTENDANCE CARD
+   ATTENDANCE SUMMARY
 ========================= */
 
 .attendance-card {
-
     padding: 20px;
 
     margin-bottom: 14px;
@@ -653,34 +600,28 @@ header {
 
 
 .attendance-header {
-
     display: flex;
 
-    justify-content:
-        space-between;
+    justify-content: space-between;
 
-    align-items:
-        flex-start;
+    align-items: flex-start;
 }
 
 
 .label {
-
     color: var(--muted);
 
     font-size: 9px;
 
     font-weight: 850;
 
-    text-transform:
-        uppercase;
+    text-transform: uppercase;
 
     letter-spacing: 1px;
 }
 
 
 .percentage {
-
     margin-top: 5px;
 
     font-size: 43px;
@@ -692,7 +633,6 @@ header {
 
 
 .percentage span {
-
     color: var(--muted);
 
     font-size: 18px;
@@ -706,9 +646,7 @@ header {
 ========================= */
 
 .status {
-
-    padding:
-        8px 10px;
+    padding: 8px 10px;
 
     border-radius: 10px;
 
@@ -719,32 +657,23 @@ header {
 
 
 .safe {
+    background: var(--green-light);
 
-    background:
-        var(--green-light);
-
-    color:
-        #168258;
+    color: #168258;
 }
 
 
 .warning {
+    background: #fff5dd;
 
-    background:
-        #fff5dd;
-
-    color:
-        #a87816;
+    color: #a87816;
 }
 
 
 .danger {
+    background: var(--red-light);
 
-    background:
-        var(--red-light);
-
-    color:
-        #b73737;
+    color: #b73737;
 }
 
 
@@ -753,14 +682,11 @@ header {
 ========================= */
 
 .progress {
-
     height: 9px;
 
-    margin:
-        15px 0 13px;
+    margin: 15px 0 13px;
 
-    background:
-        #f0f0f4;
+    background: #f0f0f4;
 
     border-radius: 100px;
 
@@ -769,13 +695,11 @@ header {
 
 
 .progress-fill {
-
     height: 100%;
 
     width: 0;
 
-    background:
-        var(--green);
+    background: var(--green);
 
     border-radius: 100px;
 
@@ -789,7 +713,6 @@ header {
 ========================= */
 
 .counters {
-
     display: grid;
 
     grid-template-columns:
@@ -800,21 +723,17 @@ header {
 
 
 .counter {
-
     padding: 12px;
 
-    background:
-        #fafafd;
+    background: #fafafd;
 
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
     border-radius: 13px;
 }
 
 
 .counter strong {
-
     display: block;
 
     font-size: 18px;
@@ -822,7 +741,6 @@ header {
 
 
 .counter span {
-
     color: var(--muted);
 
     font-size: 9px;
@@ -834,17 +752,13 @@ header {
 ========================= */
 
 .tip {
-
     margin-top: 12px;
 
-    padding:
-        11px 12px;
+    padding: 11px 12px;
 
-    background:
-        var(--purple-light);
+    background: var(--purple-light);
 
-    color:
-        #5648bd;
+    color: #5648bd;
 
     border-radius: 13px;
 
@@ -857,19 +771,17 @@ header {
 
 
 /* =========================
-   RESET
+   RESET BUTTON
 ========================= */
 
 .reset {
-
     width: 100%;
 
     margin-top: 14px;
 
     padding: 10px;
 
-    border:
-        1px solid var(--border);
+    border: 1px solid var(--border);
 
     border-radius: 11px;
 
@@ -890,18 +802,15 @@ header {
 ========================= */
 
 .bottom-nav {
-
     position: fixed;
 
     left: 50%;
-
     bottom: 0;
 
     transform:
         translateX(-50%);
 
-    width:
-        min(480px, 100%);
+    width: min(480px, 100%);
 
     padding:
         9px 18px
@@ -924,7 +833,6 @@ header {
 
 
 .nav-items {
-
     display: flex;
 
     justify-content:
@@ -933,7 +841,6 @@ header {
 
 
 .nav-item {
-
     text-align: center;
 
     color: #9b9daa;
@@ -945,7 +852,6 @@ header {
 
 
 .nav-item-icon {
-
     margin-bottom: 3px;
 
     font-size: 18px;
@@ -953,9 +859,29 @@ header {
 
 
 .nav-item.active {
+    color: var(--purple);
+}
 
-    color:
-        var(--purple);
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width: 481px) {
+
+    body {
+        padding: 20px 0;
+    }
+
+    .bottom-nav {
+        bottom: 20px;
+
+        border:
+            1px solid var(--border);
+
+        border-radius: 20px;
+    }
+
 }
 
 </style>
@@ -968,316 +894,338 @@ header {
 <div class="app">
 
 
-<!-- =========================
-     HEADER
-========================= -->
+    <!-- =====================
+         HEADER
+    ====================== -->
 
-<header>
+    <header>
 
-    <div class="brand">
+        <div class="brand">
 
-        <div class="logo">
-            ✓
-        </div>
-
-        <div>
-
-            <h1>
-                Attendix
-            </h1>
-
-            <p>
-                Smart attendance tracker
-            </p>
-
-        </div>
-
-    </div>
-
-
-    <button
-        class="today-button"
-        id="todayButton">
-
-        ⌾
-
-    </button>
-
-</header>
-
-
-
-<!-- =========================
-     CALENDAR
-========================= -->
-
-<section
-    class="card calendar-card">
-
-
-    <div class="calendar-header">
-
-
-        <div>
-
-            <div
-                class="month-name"
-                id="monthName">
+            <div class="logo">
+                ✓
             </div>
 
-            <span
-                class="year"
-                id="year">
-            </span>
+            <div>
+
+                <h1>
+                    Attendix
+                </h1>
+
+                <p>
+                    Smart attendance tracker
+                </p>
+
+            </div>
 
         </div>
 
 
-        <div
-            class="month-buttons">
+        <button
+            class="today-button"
+            id="todayButton">
 
-            <button
-                id="previousMonth">
-                ‹
-            </button>
+            ⌾
 
-            <button
-                id="nextMonth">
-                ›
-            </button>
+        </button>
 
-        </div>
-
-
-    </div>
-
-
-
-    <!-- WEEK DAYS -->
-
-    <div class="weekdays">
-
-        <div>S</div>
-        <div>M</div>
-        <div>T</div>
-        <div>W</div>
-        <div>T</div>
-        <div>F</div>
-        <div>S</div>
-
-    </div>
-
-
-
-    <!-- DAYS -->
-
-    <div
-        class="calendar"
-        id="calendar">
-    </div>
-
-
-
-    <!-- LEGEND -->
-
-    <div class="legend">
-
-        <span>
-            <i class="dot green"></i>
-            Present
-        </span>
-
-        <span>
-            <i class="dot red"></i>
-            Absent
-        </span>
-
-    </div>
+    </header>
 
 
 
     <!-- =====================
-         ATTENDANCE CONTROLS
-
-         HIDDEN UNTIL DATE
-         IS SELECTED
+         CALENDAR
     ====================== -->
 
-    <div
-        class="quick-attendance"
-        id="quickAttendance">
+    <section
+        class="card calendar-card">
 
 
-        <div
-            class="selected-info">
+        <div class="calendar-header">
 
 
-            <strong
-                id="selectedDate">
-                Select a date
-            </strong>
+            <div>
 
+                <div
+                    class="month-name"
+                    id="monthName">
+                </div>
 
-            <span
-                id="selectedStatus">
-                Tap a date to mark attendance
-            </span>
+                <span
+                    class="year"
+                    id="year">
+                </span>
 
-
-        </div>
-
-
-
-        <div
-            class="quick-buttons">
-
-
-            <button
-                class="quick-present"
-                id="presentButton">
-
-                ✓ Present
-
-            </button>
-
-
-            <button
-                class="quick-absent"
-                id="absentButton">
-
-                ✕ Absent
-
-            </button>
-
-
-        </div>
-
-
-    </div>
-
-
-</section>
-
-
-
-<!-- =========================
-     ATTENDANCE SUMMARY
-========================= -->
-
-<section
-    class="card attendance-card">
-
-
-    <div
-        class="attendance-header">
-
-
-        <div>
-
-            <div class="label">
-                Overall Attendance
             </div>
 
 
             <div
-                class="percentage"
-                id="percentage">
+                class="month-buttons">
 
-                0<span>%</span>
+                <button
+                    id="previousMonth">
+                    ‹
+                </button>
 
+                <button
+                    id="nextMonth">
+                    ›
+                </button>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- WEEKDAYS -->
+
+        <div class="weekdays">
+
+            <div>S</div>
+            <div>M</div>
+            <div>T</div>
+            <div>W</div>
+            <div>T</div>
+            <div>F</div>
+            <div>S</div>
+
+        </div>
+
+
+
+        <!-- DAYS -->
+
+        <div
+            class="calendar"
+            id="calendar">
+        </div>
+
+
+
+        <!-- LEGEND -->
+
+        <div class="legend">
+
+            <span>
+
+                <i class="dot green"></i>
+
+                Present
+
+            </span>
+
+
+            <span>
+
+                <i class="dot red"></i>
+
+                Absent
+
+            </span>
+
+        </div>
+
+
+
+        <!-- ==================
+             QUICK ATTENDANCE
+
+             Hidden initially.
+             Appears when a date
+             is selected.
+        =================== -->
+
+        <div
+            class="quick-attendance"
+            id="quickAttendance">
+
+
+            <div class="selected-info">
+
+
+                <strong
+                    id="selectedDate">
+
+                    Select a date
+
+                </strong>
+
+
+                <span
+                    id="selectedStatus">
+
+                    Not marked yet
+
+                </span>
+
+
+            </div>
+
+
+
+            <div class="quick-buttons">
+
+
+                <button
+                    class="quick-present"
+                    id="presentButton">
+
+                    ✓ Present
+
+                </button>
+
+
+                <button
+                    class="quick-absent"
+                    id="absentButton">
+
+                    ✕ Absent
+
+                </button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+
+    <!-- =====================
+         ATTENDANCE SUMMARY
+    ====================== -->
+
+    <section
+        class="card attendance-card">
+
+
+        <div
+            class="attendance-header">
+
+
+            <div>
+
+
+                <div class="label">
+
+                    Overall Attendance
+
+                </div>
+
+
+                <div
+                    class="percentage"
+                    id="percentage">
+
+                    0<span>%</span>
+
+                </div>
+
+
+            </div>
+
+
+            <div
+                class="status"
+                id="status">
+
+                No data
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- PROGRESS BAR -->
+
+        <div class="progress">
+
+            <div
+                class="progress-fill"
+                id="progressFill">
             </div>
 
         </div>
 
 
+
+        <!-- COUNTERS -->
+
+        <div class="counters">
+
+
+            <div class="counter">
+
+                <strong
+                    id="presentCount">
+
+                    0
+
+                </strong>
+
+                <span>
+
+                    Present classes
+
+                </span>
+
+            </div>
+
+
+            <div class="counter">
+
+                <strong
+                    id="absentCount">
+
+                    0
+
+                </strong>
+
+                <span>
+
+                    Absent classes
+
+                </span>
+
+            </div>
+
+
+        </div>
+
+
+
+        <!-- TIP -->
+
         <div
-            class="status"
-            id="status">
+            class="tip"
+            id="tip">
 
-            No data
-
-        </div>
-
-
-    </div>
-
-
-
-    <!-- PROGRESS -->
-
-    <div class="progress">
-
-        <div
-            class="progress-fill"
-            id="progressFill">
-        </div>
-
-    </div>
-
-
-
-    <!-- COUNTERS -->
-
-    <div class="counters">
-
-
-        <div class="counter">
-
-            <strong
-                id="presentCount">
-                0
-            </strong>
-
-            <span>
-                Present classes
-            </span>
+            Start by selecting a date
+            on the calendar.
 
         </div>
 
 
-        <div class="counter">
 
-            <strong
-                id="absentCount">
-                0
-            </strong>
+        <!-- RESET -->
 
-            <span>
-                Absent classes
-            </span>
+        <button
+            class="reset"
+            id="resetButton">
 
-        </div>
+            Reset all attendance
+
+        </button>
 
 
-    </div>
-
-
-
-    <!-- TIP -->
-
-    <div
-        class="tip"
-        id="tip">
-
-        Start by selecting a date
-        on the calendar.
-
-    </div>
-
-
-
-    <!-- RESET -->
-
-    <button
-        class="reset"
-        id="resetButton">
-
-        Reset all attendance
-
-    </button>
-
-
-</section>
+    </section>
 
 
 </div>
@@ -1286,7 +1234,7 @@ header {
 
 <!-- =========================
      BOTTOM NAVIGATION
-========================= -->
+========================== -->
 
 <nav class="bottom-nav">
 
@@ -1297,8 +1245,7 @@ header {
         <div
             class="nav-item active">
 
-            <div
-                class="nav-item-icon">
+            <div class="nav-item-icon">
                 ▦
             </div>
 
@@ -1310,8 +1257,7 @@ header {
         <div
             class="nav-item">
 
-            <div
-                class="nav-item-icon">
+            <div class="nav-item-icon">
                 ◷
             </div>
 
@@ -1323,8 +1269,7 @@ header {
         <div
             class="nav-item">
 
-            <div
-                class="nav-item-icon">
+            <div class="nav-item-icon">
                 ⚙
             </div>
 
@@ -1358,20 +1303,13 @@ let attendance =
     );
 
 
-/* =========================
-   CURRENT MONTH
-========================= */
-
 let currentDate =
     new Date();
 
 
-/* =========================
-   SELECTED DATE
-========================= */
-
 let selectedDate =
     null;
+
 
 
 /* =========================
@@ -1385,6 +1323,7 @@ function $(id) {
 }
 
 
+
 /* =========================
    DATE KEY
 ========================= */
@@ -1396,6 +1335,7 @@ function makeKey(
 ) {
 
     return (
+
         year +
         "-" +
         String(month + 1)
@@ -1403,9 +1343,11 @@ function makeKey(
         "-" +
         String(day)
             .padStart(2, "0")
+
     );
 
 }
+
 
 
 /* =========================
@@ -1427,6 +1369,7 @@ function saveData() {
 }
 
 
+
 /* =========================
    RENDER CALENDAR
 ========================= */
@@ -1440,6 +1383,7 @@ function renderCalendar() {
 
     const month =
         currentDate.getMonth();
+
 
 
     /* MONTH NAME */
@@ -1459,11 +1403,13 @@ function renderCalendar() {
         year;
 
 
+
     const calendar =
         $("calendar");
 
 
     calendar.innerHTML = "";
+
 
 
     /* FIRST DAY */
@@ -1476,6 +1422,7 @@ function renderCalendar() {
         ).getDay();
 
 
+
     /* NUMBER OF DAYS */
 
     const daysInMonth =
@@ -1486,7 +1433,8 @@ function renderCalendar() {
         ).getDate();
 
 
-    /* EMPTY SPACES */
+
+    /* EMPTY DAYS */
 
     for (
         let i = 0;
@@ -1494,13 +1442,16 @@ function renderCalendar() {
         i++
     ) {
 
+
         const empty =
             document.createElement(
                 "div"
             );
 
+
         empty.className =
             "day empty";
+
 
         calendar.appendChild(
             empty
@@ -1509,10 +1460,12 @@ function renderCalendar() {
     }
 
 
+
     /* TODAY */
 
     const today =
         new Date();
+
 
 
     /* CREATE DAYS */
@@ -1545,10 +1498,13 @@ function renderCalendar() {
         button.innerHTML = `
 
             <span class="number">
+
                 ${day}
+
             </span>
 
         `;
+
 
 
         /* PRESENT / ABSENT */
@@ -1582,6 +1538,7 @@ function renderCalendar() {
         }
 
 
+
         /* TODAY */
 
         if (
@@ -1608,6 +1565,7 @@ function renderCalendar() {
         }
 
 
+
         /* SELECTED */
 
         if (
@@ -1620,6 +1578,7 @@ function renderCalendar() {
             );
 
         }
+
 
 
         /* CLICK */
@@ -1643,9 +1602,11 @@ function renderCalendar() {
     }
 
 
+
     updateStatistics();
 
 }
+
 
 
 /* =========================
@@ -1661,15 +1622,17 @@ function selectDate(
         dateKey;
 
 
+
     /*
-       SHOW PRESENT / ABSENT
-       ONLY AFTER DATE CLICK
+       SHOW PRESENT /
+       ABSENT BUTTONS
     */
 
     $("quickAttendance")
         .classList.add(
             "show"
         );
+
 
 
     /* DATE */
@@ -1693,16 +1656,19 @@ function selectDate(
         );
 
 
-    /* CURRENT STATUS */
+
+    /* STATUS */
 
     if (
         attendance[dateKey] ===
         "present"
     ) {
 
+
         $("selectedStatus")
             .textContent =
             "Currently Present";
+
 
     }
 
@@ -1711,13 +1677,16 @@ function selectDate(
         "absent"
     ) {
 
+
         $("selectedStatus")
             .textContent =
             "Currently Absent";
 
+
     }
 
     else {
+
 
         $("selectedStatus")
             .textContent =
@@ -1726,11 +1695,16 @@ function selectDate(
     }
 
 
-    /* UPDATE SELECTED DATE */
+
+    /*
+       Re-render calendar
+       to show selection.
+    */
 
     renderCalendar();
 
 }
+
 
 
 /* =========================
@@ -1749,6 +1723,9 @@ function markAttendance(
     }
 
 
+
+    /* SAVE */
+
     attendance[
         selectedDate
     ] = status;
@@ -1756,6 +1733,9 @@ function markAttendance(
 
     saveData();
 
+
+
+    /* UPDATE */
 
     renderCalendar();
 
@@ -1765,6 +1745,7 @@ function markAttendance(
     );
 
 }
+
 
 
 /* =========================
@@ -1800,21 +1781,20 @@ function updateStatistics() {
         present + absent;
 
 
+
     let percentage = 0;
 
 
     if (total > 0) {
 
         percentage =
-            (
-                present /
-                total
-            ) * 100;
+            (present / total) * 100;
 
     }
 
 
-    /* COUNTS */
+
+    /* COUNTERS */
 
     $("presentCount")
         .textContent =
@@ -1824,6 +1804,7 @@ function updateStatistics() {
     $("absentCount")
         .textContent =
         absent;
+
 
 
     /* PERCENTAGE */
@@ -1842,11 +1823,13 @@ function updateStatistics() {
         "<span>%</span>";
 
 
+
     /* PROGRESS */
 
     $("progressFill")
         .style.width =
         percentage + "%";
+
 
 
     /* STATUS */
@@ -1857,6 +1840,7 @@ function updateStatistics() {
 
     status.className =
         "status";
+
 
 
     if (total === 0) {
@@ -1936,6 +1920,7 @@ function updateStatistics() {
 }
 
 
+
 /* =========================
    PREVIOUS MONTH
 ========================= */
@@ -1945,16 +1930,19 @@ $("previousMonth")
         "click",
         function () {
 
+
             currentDate.setMonth(
 
                 currentDate.getMonth() - 1
 
             );
 
+
             renderCalendar();
 
         }
     );
+
 
 
 /* =========================
@@ -1966,16 +1954,19 @@ $("nextMonth")
         "click",
         function () {
 
+
             currentDate.setMonth(
 
                 currentDate.getMonth() + 1
 
             );
 
+
             renderCalendar();
 
         }
     );
+
 
 
 /* =========================
@@ -1987,13 +1978,16 @@ $("todayButton")
         "click",
         function () {
 
+
             currentDate =
                 new Date();
+
 
             renderCalendar();
 
         }
     );
+
 
 
 /* =========================
@@ -2013,6 +2007,7 @@ $("presentButton")
     );
 
 
+
 /* =========================
    ABSENT
 ========================= */
@@ -2028,6 +2023,7 @@ $("absentButton")
 
         }
     );
+
 
 
 /* =========================
@@ -2073,6 +2069,7 @@ $("resetButton")
 
         }
     );
+
 
 
 /* =========================
