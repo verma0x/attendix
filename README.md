@@ -78,16 +78,4 @@ Attendance % = (Present Classes / Total Classes) × 100
 - Dynamic UI updates
 - Building a practical student-focused web application
 
-## 👨‍💻 Author
-
-**Harshil Kumar Verma**
-
-B.Tech Computer Science & Engineering
-
-## 📄 License
-
-This project is licensed under the MIT License.
-
----
-
-> Built as a personal learning project to make everyday student attendance tracking easier.
+## Made with ❤️ by **verma0x**
