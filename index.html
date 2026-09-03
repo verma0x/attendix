@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Attendix</title>
+<title>Attendix | verma0x </title>
 
 <style>
 
@@ -25,7 +24,9 @@
 
 :root {
 
-    --bg: #f7f7fb;
+    --bg: radial-gradient(circle at 50% 20%, rgba(102, 87, 232, 0.18) 0%, rgba(247, 247, 251, 0) 60%),
+          radial-gradient(circle at 80% 80%, rgba(102, 87, 232, 0.12) 0%, rgba(247, 247, 251, 0) 50%),
+          #f7f7fb;
     --card: #ffffff;
     --text: #171820;
     --muted: #8c8d9b;
@@ -51,7 +52,9 @@
 
 body.dark {
 
-    --bg: #0f1016;
+    --bg: radial-gradient(circle at 50% 20%, rgba(130, 117, 245, 0.25) 0%, rgba(15, 16, 22, 0) 65%),
+          radial-gradient(circle at 80% 80%, rgba(130, 117, 245, 0.15) 0%, rgba(15, 16, 22, 0) 50%),
+          #0f1016;
     --card: #181922;
     --text: #f4f4f7;
     --muted: #9294a3;
@@ -80,6 +83,8 @@ body {
     min-height: 100vh;
 
     background: var(--bg);
+    background-attachment: fixed;
+    background-repeat: no-repeat;
 
     color: var(--text);
 
@@ -907,6 +912,98 @@ body.dark .warning {
 
 
 /* =========================================
+   HISTORY & SETTINGS STYLES
+========================================= */
+
+.history-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 8px;
+
+    max-height: 400px;
+
+    overflow-y: auto;
+}
+
+
+.history-item {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 10px 12px;
+
+    background: var(--soft);
+
+    border-radius: 12px;
+
+    font-size: 11px;
+
+    font-weight: 700;
+}
+
+
+.history-item .status-badge {
+
+    padding: 4px 8px;
+
+    border-radius: 8px;
+
+    font-size: 10px;
+
+    text-transform: capitalize;
+}
+
+
+.setting-item {
+
+    margin-bottom: 18px;
+}
+
+
+.setting-item label {
+
+    display: block;
+
+    font-size: 11px;
+
+    font-weight: 750;
+
+    color: var(--muted);
+
+    margin-bottom: 6px;
+}
+
+
+.setting-input {
+
+    width: 100%;
+
+    padding: 10px;
+
+    border: 1px solid var(--border);
+
+    border-radius: 11px;
+
+    background: var(--card);
+
+    color: var(--text);
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    outline: none;
+}
+
+
+/* =========================================
    BOTTOM NAV
 ========================================= */
 
@@ -966,6 +1063,8 @@ body.dark .warning {
     font-size: 9px;
 
     font-weight: 750;
+
+    cursor: pointer;
 }
 
 
@@ -1071,238 +1170,325 @@ body.dark .warning {
 
 
 <!-- =====================================
-     CALENDAR
+     VIEW 1: ATTENDANCE
 ===================================== -->
 
-<section
-    class="card calendar-card">
+<main id="view-attendance" class="view active">
 
 
-    <div
-        class="calendar-top">
+    <!-- CALENDAR CARD -->
+
+    <section
+        class="card calendar-card">
 
 
-        <div>
+        <div
+            class="calendar-top">
 
-            <div
-                class="month"
-                id="monthName">
+
+            <div>
+
+                <div
+                    class="month"
+                    id="monthName">
+                </div>
+
+                <span
+                    class="year"
+                    id="year">
+                </span>
+
             </div>
 
-            <span
-                class="year"
-                id="year">
+
+            <div
+                class="month-controls">
+
+                <button
+                    id="previousMonth">
+
+                    ‹
+
+                </button>
+
+
+                <button
+                    id="nextMonth">
+
+                    ›
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- WEEK DAYS -->
+
+        <div class="weekdays">
+
+            <div>S</div>
+            <div>M</div>
+            <div>T</div>
+            <div>W</div>
+            <div>T</div>
+            <div>F</div>
+            <div>S</div>
+
+        </div>
+
+
+
+        <!-- CALENDAR -->
+
+        <div
+            class="calendar"
+            id="calendar">
+        </div>
+
+
+
+        <!-- LEGEND -->
+
+        <div class="legend">
+
+            <span>
+
+                <i
+                    class="legend-dot legend-green">
+                </i>
+
+                Present
+
+            </span>
+
+
+            <span>
+
+                <i
+                    class="legend-dot legend-red">
+                </i>
+
+                Absent
+
             </span>
 
         </div>
 
 
+    </section>
+
+
+
+    <!-- ATTENDANCE SUMMARY -->
+
+    <section
+        class="card attendance-card">
+
+
         <div
-            class="month-controls">
-
-            <button
-                id="previousMonth">
-
-                ‹
-
-            </button>
+            class="attendance-header">
 
 
-            <button
-                id="nextMonth">
+            <div>
 
-                ›
+                <div class="label">
 
-            </button>
+                    Overall Attendance
+
+                </div>
+
+
+                <div
+                    class="percentage"
+                    id="percentage">
+
+                    0<span>%</span>
+
+                </div>
+
+            </div>
+
+
+            <div
+                class="status"
+                id="status">
+
+                No data
+
+            </div>
+
 
         </div>
 
-    </div>
+
+
+        <!-- PROGRESS -->
+
+        <div class="progress">
+
+            <div
+                class="progress-fill"
+                id="progressFill">
+
+            </div>
+
+        </div>
 
 
 
-    <!-- WEEK DAYS -->
+        <!-- COUNTERS -->
 
-    <div class="weekdays">
-
-        <div>S</div>
-        <div>M</div>
-        <div>T</div>
-        <div>W</div>
-        <div>T</div>
-        <div>F</div>
-        <div>S</div>
-
-    </div>
+        <div class="counters">
 
 
+            <div class="counter">
 
-    <!-- CALENDAR -->
+                <strong
+                    id="presentCount">
 
-    <div
-        class="calendar"
-        id="calendar">
-    </div>
+                    0
 
+                </strong>
 
+                <span>
+                    Present classes
+                </span>
 
-    <!-- LEGEND -->
-
-    <div class="legend">
-
-        <span>
-
-            <i
-                class="legend-dot legend-green">
-            </i>
-
-            Present
-
-        </span>
+            </div>
 
 
-        <span>
+            <div class="counter">
 
-            <i
-                class="legend-dot legend-red">
-            </i>
+                <strong
+                    id="absentCount">
 
-            Absent
+                    0
 
-        </span>
+                </strong>
 
-    </div>
+                <span>
+                    Absent classes
+                </span>
+
+            </div>
 
 
-</section>
+        </div>
+
+
+
+        <!-- TIP -->
+
+        <div
+            class="tip"
+            id="tip">
+
+            Select a date to mark
+            your attendance.
+
+        </div>
+
+
+
+        <!-- RESET -->
+
+        <button
+            class="reset"
+            id="resetButton">
+
+            Reset all attendance
+
+        </button>
+
+
+    </section>
+
+
+</main>
 
 
 
 <!-- =====================================
-     ATTENDANCE SUMMARY
+     VIEW 2: HISTORY
 ===================================== -->
 
-<section
-    class="card attendance-card">
+<main id="view-history" class="view" style="display: none;">
 
+    <section class="card attendance-card">
 
-    <div
-        class="attendance-header">
-
-
-        <div>
+        <div class="attendance-header" style="margin-bottom: 15px;">
 
             <div class="label">
 
-                Overall Attendance
-
-            </div>
-
-
-            <div
-                class="percentage"
-                id="percentage">
-
-                0<span>%</span>
+                Attendance Records
 
             </div>
 
         </div>
 
 
-        <div
-            class="status"
-            id="status">
+        <div id="historyList" class="history-list">
 
-            No data
+            <!-- Dynamic Records Populated Here -->
+
+        </div>
+
+    </section>
+
+</main>
+
+
+
+<!-- =====================================
+     VIEW 3: SETTINGS
+===================================== -->
+
+<main id="view-settings" class="view" style="display: none;">
+
+    <section class="card attendance-card">
+
+        <div class="attendance-header" style="margin-bottom: 15px;">
+
+            <div class="label">
+
+                Preferences
+
+            </div>
 
         </div>
 
 
-    </div>
+        <div class="setting-item">
 
+            <label for="targetInput">Target Attendance Percentage</label>
 
-
-    <!-- PROGRESS -->
-
-    <div class="progress">
-
-        <div
-            class="progress-fill"
-            id="progressFill">
-
-        </div>
-
-    </div>
-
-
-
-    <!-- COUNTERS -->
-
-    <div class="counters">
-
-
-        <div class="counter">
-
-            <strong
-                id="presentCount">
-
-                0
-
-            </strong>
-
-            <span>
-                Present classes
-            </span>
+            <input type="number" id="targetInput" min="50" max="100" value="75" class="setting-input" />
 
         </div>
 
 
-        <div class="counter">
+        <div class="setting-item">
 
-            <strong
-                id="absentCount">
+            <label>Export / Import Data</label>
 
-                0
+            <div style="display: flex; gap: 8px; margin-top: 6px;">
 
-            </strong>
+                <button id="exportBtn" class="reset" style="margin-top: 0;">Export Data</button>
 
-            <span>
-                Absent classes
-            </span>
+                <button id="importBtn" class="reset" style="margin-top: 0;">Import Data</button>
+
+            </div>
+
+            <input type="file" id="importFile" accept=".json" style="display: none;" />
 
         </div>
 
+    </section>
 
-    </div>
-
-
-
-    <!-- TIP -->
-
-    <div
-        class="tip"
-        id="tip">
-
-        Select a date to mark
-        your attendance.
-
-    </div>
-
-
-
-    <!-- RESET -->
-
-    <button
-        class="reset"
-        id="resetButton">
-
-        Reset all attendance
-
-    </button>
-
-
-</section>
+</main>
 
 
 </div>
@@ -1319,7 +1505,8 @@ body.dark .warning {
 
 
         <div
-            class="nav-item active">
+            class="nav-item active"
+            data-target="view-attendance">
 
             <div class="nav-icon">
                 ▦
@@ -1331,7 +1518,8 @@ body.dark .warning {
 
 
         <div
-            class="nav-item">
+            class="nav-item"
+            data-target="view-history">
 
             <div class="nav-icon">
                 ◷
@@ -1343,7 +1531,8 @@ body.dark .warning {
 
 
         <div
-            class="nav-item">
+            class="nav-item"
+            data-target="view-settings">
 
             <div class="nav-icon">
                 ⚙
@@ -1363,35 +1552,23 @@ body.dark .warning {
 <script>
 
 /* =========================================
-   STORAGE
+   STORAGE KEYS & DATA
 ========================================= */
 
-const STORAGE_KEY =
-    "attendixAttendance";
+const STORAGE_KEY = "attendixAttendance";
+const THEME_KEY = "attendixTheme";
+const SETTINGS_KEY = "attendixSettings";
 
-const THEME_KEY =
-    "attendixTheme";
+let attendance = JSON.parse(
+    localStorage.getItem(STORAGE_KEY) || "{}"
+);
 
+let settings = JSON.parse(
+    localStorage.getItem(SETTINGS_KEY) || '{"target": 75}'
+);
 
-/* =========================================
-   DATA
-========================================= */
-
-let attendance =
-    JSON.parse(
-        localStorage.getItem(
-            STORAGE_KEY
-        ) || "{}"
-    );
-
-
-let currentDate =
-    new Date();
-
-
-let selectedDate =
-    null;
-
+let currentDate = new Date();
+let selectedDate = null;
 
 
 /* =========================================
@@ -1399,57 +1576,35 @@ let selectedDate =
 ========================================= */
 
 function $(id) {
-
     return document.getElementById(id);
-
 }
-
 
 
 /* =========================================
    DATE KEY
 ========================================= */
 
-function makeKey(
-    year,
-    month,
-    day
-) {
-
+function makeKey(year, month, day) {
     return (
-
         year +
         "-" +
-        String(month + 1)
-            .padStart(2, "0") +
+        String(month + 1).padStart(2, "0") +
         "-" +
-        String(day)
-            .padStart(2, "0")
-
+        String(day).padStart(2, "0")
     );
-
 }
-
 
 
 /* =========================================
-   SAVE ATTENDANCE
+   SAVE DATA
 ========================================= */
 
 function saveData() {
-
     localStorage.setItem(
-
         STORAGE_KEY,
-
-        JSON.stringify(
-            attendance
-        )
-
+        JSON.stringify(attendance)
     );
-
 }
-
 
 
 /* =========================================
@@ -1458,404 +1613,127 @@ function saveData() {
 
 function renderCalendar() {
 
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
 
-    const year =
-        currentDate.getFullYear();
+    $("monthName").textContent = currentDate.toLocaleString("en-US", { month: "long" });
+    $("year").textContent = year;
 
-
-    const month =
-        currentDate.getMonth();
-
-
-
-    $("monthName")
-        .textContent =
-        currentDate.toLocaleString(
-            "en-US",
-            {
-                month: "long"
-            }
-        );
-
-
-    $("year")
-        .textContent =
-        year;
-
-
-
-    const calendar =
-        $("calendar");
-
-
+    const calendar = $("calendar");
     calendar.innerHTML = "";
 
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-
-    const firstDay =
-        new Date(
-            year,
-            month,
-            1
-        ).getDay();
-
-
-    const daysInMonth =
-        new Date(
-            year,
-            month + 1,
-            0
-        ).getDate();
-
-
-
-    /* =================================
-       EMPTY CELLS
-    ================================= */
-
-    for (
-        let i = 0;
-        i < firstDay;
-        i++
-    ) {
-
-        const empty =
-            document.createElement(
-                "div"
-            );
-
-        empty.className =
-            "day";
-
-        calendar.appendChild(
-            empty
-        );
-
+    /* EMPTY CELLS */
+    for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day";
+        calendar.appendChild(empty);
     }
 
+    const today = new Date();
 
+    /* DAYS */
+    for (let day = 1; day <= daysInMonth; day++) {
 
-    const today =
-        new Date();
+        const dateKey = makeKey(year, month, day);
 
+        const wrapper = document.createElement("div");
+        wrapper.className = "day-wrapper";
 
+        const button = document.createElement("button");
+        button.className = "day";
+        button.innerHTML = `<span>${day}</span>`;
 
-    /* =================================
-       DAYS
-    ================================= */
-
-    for (
-        let day = 1;
-        day <= daysInMonth;
-        day++
-    ) {
-
-
-        const dateKey =
-            makeKey(
-                year,
-                month,
-                day
-            );
-
-
-        /* WRAPPER */
-
-        const wrapper =
-            document.createElement(
-                "div"
-            );
-
-        wrapper.className =
-            "day-wrapper";
-
-
-
-        /* DAY BUTTON */
-
-        const button =
-            document.createElement(
-                "button"
-            );
-
-        button.className =
-            "day";
-
-
-        button.innerHTML =
-            `<span>${day}</span>`;
-
-
-
-        /* =================================
-           ATTENDANCE STATUS
-        ================================= */
-
-        if (
-            attendance[dateKey]
-        ) {
-
-            button.classList.add(
-
-                attendance[dateKey]
-
-            );
-
-
-            const dot =
-                document.createElement(
-                    "span"
-                );
-
-            dot.className =
-                "status-dot";
-
-            button.appendChild(
-                dot
-            );
-
+        /* ATTENDANCE STATUS */
+        if (attendance[dateKey]) {
+            button.classList.add(attendance[dateKey]);
+            const dot = document.createElement("span");
+            dot.className = "status-dot";
+            button.appendChild(dot);
         }
 
-
-
-        /* =================================
-           TODAY
-        ================================= */
-
+        /* TODAY */
         if (
-
-            year ===
-            today.getFullYear()
-
-            &&
-
-            month ===
-            today.getMonth()
-
-            &&
-
-            day ===
-            today.getDate()
-
+            year === today.getFullYear() &&
+            month === today.getMonth() &&
+            day === today.getDate()
         ) {
-
-            button.classList.add(
-                "today"
-            );
-
+            button.classList.add("today");
         }
 
-
-
-        /* =================================
-           SELECTED
-        ================================= */
-
-        if (
-            dateKey ===
-            selectedDate
-        ) {
-
-            button.classList.add(
-                "selected"
-            );
-
-            wrapper.classList.add(
-                "active"
-            );
-
+        /* SELECTED */
+        if (dateKey === selectedDate) {
+            button.classList.add("selected");
+            wrapper.classList.add("active");
         }
 
-
-
-        /* =================================
-           POPUP
-        ================================= */
-
-        const popup =
-            document.createElement(
-                "div"
-            );
-
-        popup.className =
-            "attendance-popup";
-
-
+        /* POPUP */
+        const popup = document.createElement("div");
+        popup.className = "attendance-popup";
 
         /* PRESENT BUTTON */
+        const present = document.createElement("button");
+        present.className = "popup-present";
+        present.textContent = "✓ Present";
 
-        const present =
-            document.createElement(
-                "button"
-            );
-
-        present.className =
-            "popup-present";
-
-        present.textContent =
-            "✓ Present";
-
-
-        present.addEventListener(
-            "click",
-            function(event) {
-
-                event.stopPropagation();
-
-                markAttendance(
-                    dateKey,
-                    "present"
-                );
-
-            }
-        );
-
-
+        present.addEventListener("click", function(event) {
+            event.stopPropagation();
+            markAttendance(dateKey, "present");
+        });
 
         /* ABSENT BUTTON */
+        const absent = document.createElement("button");
+        absent.className = "popup-absent";
+        absent.textContent = "✕ Absent";
 
-        const absent =
-            document.createElement(
-                "button"
-            );
+        absent.addEventListener("click", function(event) {
+            event.stopPropagation();
+            markAttendance(dateKey, "absent");
+        });
 
-        absent.className =
-            "popup-absent";
+        popup.appendChild(present);
+        popup.appendChild(absent);
 
-        absent.textContent =
-            "✕ Absent";
+        wrapper.appendChild(button);
+        wrapper.appendChild(popup);
+        calendar.appendChild(wrapper);
 
-
-        absent.addEventListener(
-            "click",
-            function(event) {
-
-                event.stopPropagation();
-
-                markAttendance(
-                    dateKey,
-                    "absent"
-                );
-
-            }
-        );
-
-
-
-        popup.appendChild(
-            present
-        );
-
-        popup.appendChild(
-            absent
-        );
-
-
-
-        /* =================================
-           ADD ELEMENTS
-        ================================= */
-
-        wrapper.appendChild(
-            button
-        );
-
-        wrapper.appendChild(
-            popup
-        );
-
-
-        calendar.appendChild(
-            wrapper
-        );
-
-
-
-        /* =================================
-           DATE CLICK
-        ================================= */
-
-        button.addEventListener(
-            "click",
-            function(event) {
-
-                event.stopPropagation();
-
-                selectDate(
-                    dateKey
-                );
-
-            }
-        );
-
+        /* DATE CLICK */
+        button.addEventListener("click", function(event) {
+            event.stopPropagation();
+            selectDate(dateKey);
+        });
     }
-
 }
-
 
 
 /* =========================================
    SELECT DATE
 ========================================= */
 
-function selectDate(
-    dateKey
-) {
-
-
-    if (
-        selectedDate ===
-        dateKey
-    ) {
-
-        selectedDate =
-            null;
-
+function selectDate(dateKey) {
+    if (selectedDate === dateKey) {
+        selectedDate = null;
+    } else {
+        selectedDate = dateKey;
     }
-
-    else {
-
-        selectedDate =
-            dateKey;
-
-    }
-
-
     renderCalendar();
-
 }
-
 
 
 /* =========================================
    MARK ATTENDANCE
 ========================================= */
 
-function markAttendance(
-    dateKey,
-    status
-) {
-
-
-    attendance[
-        dateKey
-    ] = status;
-
-
-    selectedDate =
-        dateKey;
-
-
+function markAttendance(dateKey, status) {
+    attendance[dateKey] = status;
+    selectedDate = dateKey;
     saveData();
-
-
     renderCalendar();
-
-
     updateStatistics();
-
 }
-
 
 
 /* =========================================
@@ -1864,383 +1742,228 @@ function markAttendance(
 
 function updateStatistics() {
 
+    const values = Object.values(attendance);
 
-    const values =
-        Object.values(
-            attendance
-        );
+    const present = values.filter(value => value === "present").length;
+    const absent = values.filter(value => value === "absent").length;
+    const total = present + absent;
 
-
-    const present =
-        values.filter(
-            value =>
-                value ===
-                "present"
-        ).length;
-
-
-    const absent =
-        values.filter(
-            value =>
-                value ===
-                "absent"
-        ).length;
-
-
-    const total =
-        present + absent;
-
-
-    let percentage =
-        0;
-
-
-    if (
-        total > 0
-    ) {
-
-        percentage =
-            present /
-            total *
-            100;
-
+    let percentage = 0;
+    if (total > 0) {
+        percentage = (present / total) * 100;
     }
 
+    $("presentCount").textContent = present;
+    $("absentCount").textContent = absent;
 
+    $("percentage").innerHTML = (total ? percentage.toFixed(1) : "0") + "<span>%</span>";
+    $("progressFill").style.width = percentage + "%";
 
-    /* COUNTERS */
+    const status = $("status");
+    status.className = "status";
 
-    $("presentCount")
-        .textContent =
-        present;
+    const targetPct = settings.target || 75;
+    const warningPct = Math.max(targetPct - 15, 50);
 
-
-    $("absentCount")
-        .textContent =
-        absent;
-
-
-
-    /* PERCENTAGE */
-
-    $("percentage")
-        .innerHTML =
-
-        (
-            total
-                ? percentage.toFixed(1)
-                : "0"
-        )
-
-        +
-
-        "<span>%</span>";
-
-
-
-    /* PROGRESS */
-
-    $("progressFill")
-        .style.width =
-        percentage + "%";
-
-
-
-    /* STATUS */
-
-    const status =
-        $("status");
-
-
-    status.className =
-        "status";
-
-
-
-    if (
-        total === 0
-    ) {
-
-        status.textContent =
-            "No data";
-
-        $("tip")
-            .textContent =
-            "Select a date to mark your attendance.";
-
+    if (total === 0) {
+        status.textContent = "No data";
+        $("tip").textContent = "Select a date to mark your attendance.";
+    } else if (percentage >= targetPct) {
+        status.textContent = "✓ Safe";
+        status.classList.add("safe");
+        $("tip").textContent = `Great! Your attendance is above the ${targetPct}% target.`;
+    } else if (percentage >= warningPct) {
+        status.textContent = "⚠ Attention";
+        status.classList.add("warning");
+        $("tip").textContent = `Your attendance is getting close to the ${targetPct}% target.`;
+    } else {
+        status.textContent = "✕ Low";
+        status.classList.add("danger");
+        $("tip").textContent = `Your attendance is below ${targetPct}%. Try to attend upcoming classes.`;
     }
-
-    else if (
-        percentage >= 75
-    ) {
-
-        status.textContent =
-            "✓ Safe";
-
-        status.classList.add(
-            "safe"
-        );
-
-        $("tip")
-            .textContent =
-            "Great! Your attendance is above the 75% target.";
-
-    }
-
-    else if (
-        percentage >= 60
-    ) {
-
-        status.textContent =
-            "⚠ Attention";
-
-        status.classList.add(
-            "warning"
-        );
-
-        $("tip")
-            .textContent =
-            "Your attendance is getting close to the 75% target.";
-
-    }
-
-    else {
-
-        status.textContent =
-            "✕ Low";
-
-        status.classList.add(
-            "danger"
-        );
-
-        $("tip")
-            .textContent =
-            "Your attendance is below 75%. Try to attend upcoming classes.";
-
-    }
-
 }
 
 
-
 /* =========================================
-   MONTH CONTROLS
+   TAB SWITCHING LOGIC
 ========================================= */
 
-$("previousMonth")
-    .addEventListener(
-        "click",
-        function() {
+document.querySelectorAll(".nav-item").forEach(item => {
+    item.addEventListener("click", function() {
+        document.querySelectorAll(".nav-item").forEach(nav => nav.classList.remove("active"));
+        this.classList.add("active");
 
-            currentDate.setMonth(
-                currentDate.getMonth() - 1
-            );
+        const targetViewId = this.getAttribute("data-target");
+        document.querySelectorAll(".view").forEach(view => {
+            view.style.display = view.id === targetViewId ? "block" : "none";
+        });
 
-            selectedDate =
-                null;
-
-            renderCalendar();
-
-        }
-    );
-
-
-$("nextMonth")
-    .addEventListener(
-        "click",
-        function() {
-
-            currentDate.setMonth(
-                currentDate.getMonth() + 1
-            );
-
-            selectedDate =
-                null;
-
-            renderCalendar();
-
-        }
-    );
-
+        if (targetViewId === "view-history") renderHistory();
+        if (targetViewId === "view-settings") loadSettingsView();
+    });
+});
 
 
 /* =========================================
-   TODAY BUTTON
+   RENDER HISTORY VIEW
 ========================================= */
 
-$("todayButton")
-    .addEventListener(
-        "click",
-        function() {
+function renderHistory() {
+    const historyList = $("historyList");
+    historyList.innerHTML = "";
 
-            currentDate =
-                new Date();
+    const keys = Object.keys(attendance).sort().reverse();
 
-            selectedDate =
-                null;
+    if (keys.length === 0) {
+        historyList.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--muted); font-size:11px;">No records marked yet.</div>`;
+        return;
+    }
 
-            renderCalendar();
+    keys.forEach(dateKey => {
+        const status = attendance[dateKey];
+        const row = document.createElement("div");
+        row.className = "history-item";
 
-        }
-    );
+        const badgeClass = status === "present" ? "safe" : "danger";
+        const symbol = status === "present" ? "✓" : "✕";
 
+        row.innerHTML = `
+            <span>${dateKey}</span>
+            <span class="status-badge ${badgeClass}">${symbol} ${status}</span>
+        `;
+        historyList.appendChild(row);
+    });
+}
 
 
 /* =========================================
-   DARK MODE
+   SETTINGS & DATA MANAGEMENT
+========================================= */
+
+function loadSettingsView() {
+    $("targetInput").value = settings.target || 75;
+}
+
+$("targetInput").addEventListener("change", function() {
+    const val = parseInt(this.value, 10);
+    if (!isNaN(val) && val >= 1 && val <= 100) {
+        settings.target = val;
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+        updateStatistics();
+    }
+});
+
+/* EXPORT DATA */
+$("exportBtn").addEventListener("click", function() {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(attendance));
+    const downloadAnchor = document.createElement("a");
+    downloadAnchor.setAttribute("href", dataStr);
+    downloadAnchor.setAttribute("download", `attendix_backup_${new Date().toISOString().slice(0,10)}.json`);
+    document.body.appendChild(downloadAnchor);
+    downloadAnchor.click();
+    downloadAnchor.remove();
+});
+
+/* IMPORT DATA */
+$("importBtn").addEventListener("click", () => $("importFile").click());
+
+$("importFile").addEventListener("change", function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+        try {
+            const importedData = JSON.parse(evt.target.result);
+            if (typeof importedData === "object") {
+                attendance = importedData;
+                saveData();
+                renderCalendar();
+                updateStatistics();
+                alert("Attendance data imported successfully!");
+            }
+        } catch (err) {
+            alert("Invalid JSON file structure.");
+        }
+    };
+    reader.readAsText(file);
+});
+
+
+/* =========================================
+   MONTH CONTROLS & HEADER
+========================================= */
+
+$("previousMonth").addEventListener("click", function() {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    selectedDate = null;
+    renderCalendar();
+});
+
+$("nextMonth").addEventListener("click", function() {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    selectedDate = null;
+    renderCalendar();
+});
+
+$("todayButton").addEventListener("click", function() {
+    currentDate = new Date();
+    selectedDate = null;
+    renderCalendar();
+});
+
+
+/* =========================================
+   DARK MODE CONTROLS
 ========================================= */
 
 function updateThemeIcon() {
-
-    if (
-        document.body.classList.contains(
-            "dark"
-        )
-    ) {
-
-        $("themeButton")
-            .textContent =
-            "☀️";
-
+    if (document.body.classList.contains("dark")) {
+        $("themeButton").textContent = "☀️";
+    } else {
+        $("themeButton").textContent = "🌙";
     }
-
-    else {
-
-        $("themeButton")
-            .textContent =
-            "🌙";
-
-    }
-
 }
 
-
-
-/* =========================================
-   LOAD THEME
-========================================= */
-
-const savedTheme =
-    localStorage.getItem(
-        THEME_KEY
-    );
-
-
-if (
-    savedTheme ===
-    "dark"
-) {
-
-    document.body.classList.add(
-        "dark"
-    );
-
+const savedTheme = localStorage.getItem(THEME_KEY);
+if (savedTheme === "dark") {
+    document.body.classList.add("dark");
 }
-
-
 updateThemeIcon();
 
-
-
-/* =========================================
-   TOGGLE THEME
-========================================= */
-
-$("themeButton")
-    .addEventListener(
-        "click",
-        function() {
-
-
-            document.body
-                .classList
-                .toggle("dark");
-
-
-            const isDark =
-                document.body
-                    .classList
-                    .contains("dark");
-
-
-            localStorage.setItem(
-
-                THEME_KEY,
-
-                isDark
-                    ? "dark"
-                    : "light"
-
-            );
-
-
-            updateThemeIcon();
-
-        }
-    );
-
+$("themeButton").addEventListener("click", function() {
+    document.body.classList.toggle("dark");
+    const isDark = document.body.classList.contains("dark");
+    localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+    updateThemeIcon();
+});
 
 
 /* =========================================
    RESET ATTENDANCE
 ========================================= */
 
-$("resetButton")
-    .addEventListener(
-        "click",
-        function() {
-
-
-            if (
-                confirm(
-                    "Reset all attendance data?"
-                )
-            ) {
-
-                attendance = {};
-
-                selectedDate =
-                    null;
-
-
-                localStorage.removeItem(
-                    STORAGE_KEY
-                );
-
-
-                renderCalendar();
-
-                updateStatistics();
-
-            }
-
-        }
-    );
-
+$("resetButton").addEventListener("click", function() {
+    if (confirm("Reset all attendance data?")) {
+        attendance = {};
+        selectedDate = null;
+        localStorage.removeItem(STORAGE_KEY);
+        renderCalendar();
+        updateStatistics();
+    }
+});
 
 
 /* =========================================
-   CLOSE POPUP
+   CLOSE POPUP ON OUTSIDE CLICK
 ========================================= */
 
-document.addEventListener(
-    "click",
-    function() {
-
-        if (
-            selectedDate !== null
-        ) {
-
-            selectedDate =
-                null;
-
-            renderCalendar();
-
-        }
-
+document.addEventListener("click", function() {
+    if (selectedDate !== null) {
+        selectedDate = null;
+        renderCalendar();
     }
-);
-
+});
 
 
 /* =========================================
@@ -2248,7 +1971,6 @@ document.addEventListener(
 ========================================= */
 
 renderCalendar();
-
 updateStatistics();
 
 </script>
