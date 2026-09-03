@@ -1,1407 +1,504 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Attendix | verma0x </title>
-
-<!-- GOOGLE FONTS (POPPINS) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,500;1,600&display=swap" rel="stylesheet">
-
-<style>
-
-/* =========================================
-   RESET
-========================================= */
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-
-/* =========================================
-   LIGHT THEME
-========================================= */
-
-:root {
-    --bg-gradient: linear-gradient(-45deg, #1d0936, #411d73, #2b1055, #0f051d);
-    --card: rgba(255, 255, 255, 0.88);
-    --card-border: rgba(255, 255, 255, 0.5);
-    --text: #181124;
-    --muted: #726880;
-
-    --purple: #6c5ce7;
-    --purple-soft: rgba(108, 92, 231, 0.1);
-
-    --green: #10b981;
-    --green-soft: #e6f9f2;
-
-    --red: #ef4444;
-    --red-soft: #fee2e2;
-
-    --border: rgba(230, 225, 240, 0.8);
-    --soft: rgba(245, 243, 250, 0.9);
-}
-
-
-/* =========================================
-   DARK THEME
-========================================= */
-
-body.dark {
-    --bg-gradient: linear-gradient(-45deg, #090312, #1a0a33, #120724, #05010a);
-    --card: rgba(24, 21, 36, 0.82);
-    --card-border: rgba(255, 255, 255, 0.08);
-    --text: #f3f0f8;
-    --muted: #9f96ad;
-
-    --purple: #8b78f6;
-    --purple-soft: rgba(139, 120, 246, 0.15);
-
-    --green: #34d399;
-    --green-soft: rgba(52, 211, 153, 0.15);
-
-    --red: #f87171;
-    --red-soft: rgba(248, 113, 113, 0.15);
-
-    --border: rgba(255, 255, 255, 0.08);
-    --soft: rgba(255, 255, 255, 0.05);
-}
-
-
-/* =========================================
-   ANIMATED PURPLE GRADIENT BODY
-========================================= */
-
-body {
-    min-height: 100vh;
-    background: var(--bg-gradient);
-    background-size: 300% 300%;
-    animation: gradientShift 14s ease infinite;
-    background-attachment: fixed;
-    color: var(--text);
-    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-    transition: color 0.25s ease;
-}
-
-@keyframes gradientShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-}
-
-
-/* =========================================
-   APP CONTAINER
-========================================= */
-
-.app {
-    width: 100%;
-    max-width: 480px;
-    margin: auto;
-    padding: 20px 16px 100px;
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.brand {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.logo {
-    width: 46px;
-    height: 46px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #a855f7, #6366f1);
-    color: white;
-    font-size: 22px;
-    font-weight: 800;
-    box-shadow: 0 8px 22px rgba(168, 85, 247, 0.4);
-}
-
-.brand h1 {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.5px;
-    color: #ffffff;
-    text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
-
-.brand p {
-    margin-top: -2px;
-    color: rgba(255, 255, 255, 0.7);
-    font-size: 11px;
-    font-weight: 500;
-}
-
-
-/* =========================================
-   HEADER BUTTONS
-========================================= */
-
-.header-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.header-btn {
-    width: 42px;
-    height: 42px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    color: #ffffff;
-    font-size: 17px;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.header-btn:active {
-    transform: scale(0.92);
-}
-
-
-/* =========================================
-   CARD (GLASSMORPHISM)
-========================================= */
-
-.card {
-    background: var(--card);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid var(--card-border);
-    border-radius: 24px;
-    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.25);
-    transition: background 0.25s ease, border 0.25s ease;
-}
-
-
-/* =========================================
-   STREAK & QUOTE CARD
-========================================= */
-
-.streak-card {
-    display: flex;
-    align-items: center;
-    padding: 16px 18px;
-    margin-bottom: 15px;
-    gap: 14px;
-}
-
-.streak-left {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
-}
-
-.fire-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    background: rgba(255, 107, 0, 0.15);
-}
-
-.fire-icon {
-    font-size: 24px;
-    line-height: 1;
-    display: inline-block;
-    animation: flameFlicker 1.5s infinite ease-in-out alternate;
-    transform-origin: bottom center;
-}
-
-.fire-glow {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 14px;
-    background: radial-gradient(circle, rgba(255, 120, 0, 0.4) 0%, rgba(255, 120, 0, 0) 70%);
-    animation: pulseGlow 1.5s infinite ease-in-out alternate;
-    pointer-events: none;
-}
-
-.streak-details {
-    display: flex;
-    flex-direction: column;
-}
-
-.streak-count {
-    font-size: 22px;
-    font-weight: 800;
-    line-height: 1.1;
-    color: #ff7700;
-}
-
-.streak-label {
-    font-size: 9px;
-    font-weight: 700;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-.streak-divider {
-    width: 1px;
-    height: 32px;
-    background: var(--border);
-    flex-shrink: 0;
-}
-
-.streak-quote-box {
-    flex: 1;
-}
-
-.streak-quote {
-    font-size: 11px;
-    font-weight: 500;
-    font-style: italic;
-    color: var(--text);
-    opacity: 0.9;
-    line-height: 1.4;
-}
-
-@keyframes flameFlicker {
-    0% { transform: scale(1) rotate(-2deg); }
-    50% { transform: scale(1.12) rotate(3deg); }
-    100% { transform: scale(0.98) rotate(-1deg); }
-}
-
-@keyframes pulseGlow {
-    0% { opacity: 0.3; transform: scale(0.85); }
-    100% { opacity: 0.8; transform: scale(1.15); }
-}
-
-
-/* =========================================
-   CALENDAR CARD
-========================================= */
-
-.calendar-card {
-    padding: 20px;
-    margin-bottom: 15px;
-}
-
-.calendar-top {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
-}
-
-.month {
-    font-size: 19px;
-    font-weight: 700;
-}
-
-.year {
-    display: block;
-    margin-top: 1px;
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.month-controls {
-    display: flex;
-    gap: 6px;
-}
-
-.month-controls button {
-    width: 36px;
-    height: 36px;
-    border: none;
-    border-radius: 12px;
-    background: var(--soft);
-    color: var(--text);
-    font-size: 18px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-
-/* =========================================
-   WEEK DAYS & CALENDAR GRID
-========================================= */
-
-.weekdays {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    margin-bottom: 8px;
-}
-
-.weekdays div {
-    text-align: center;
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.calendar {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-}
-
-.day-wrapper {
-    position: relative;
-    min-width: 0;
-    display: flex;
-    justify-content: center;
-}
-
-.day {
-    width: 100%;
-    height: 48px;
-    border: none;
-    border-radius: 14px;
-    background: transparent;
-    color: var(--text);
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    position: relative;
-    transition: 0.15s;
-}
-
-.day:active {
-    transform: scale(0.92);
-}
-
-.day.today {
-    background: var(--purple-soft);
-    color: var(--purple);
-    box-shadow: inset 0 0 0 1.5px var(--purple);
-}
-
-.day.present {
-    background: var(--green-soft);
-    color: var(--green);
-}
-
-.day.absent {
-    background: var(--red-soft);
-    color: var(--red);
-}
-
-.day.selected {
-    box-shadow: inset 0 0 0 2px var(--purple);
-    transform: scale(0.94);
-    z-index: 10;
-}
-
-.day.selected.present {
-    box-shadow: inset 0 0 0 2px var(--green);
-}
-
-.day.selected.absent {
-    box-shadow: inset 0 0 0 2px var(--red);
-}
-
-.status-dot {
-    position: absolute;
-    width: 5px;
-    height: 5px;
-    bottom: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-radius: 50%;
-}
-
-.day.present .status-dot {
-    background: var(--green);
-}
-
-.day.absent .status-dot {
-    background: var(--red);
-}
-
-
-/* =========================================
-   ATTENDANCE POPUP
-========================================= */
-
-.attendance-popup {
-    position: absolute;
-    top: 53px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 50;
-    display: none;
-    width: 115px;
-    padding: 6px;
-    background: var(--card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-}
-
-.day-wrapper.active .attendance-popup {
-    display: flex;
-    gap: 4px;
-    animation: popupIn 0.16s ease;
-}
-
-@keyframes popupIn {
-    from { opacity: 0; transform: translateX(-50%) translateY(-4px) scale(0.95); }
-    to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
-}
-
-.attendance-popup button {
-    flex: 1;
-    border: none;
-    border-radius: 8px;
-    padding: 8px 4px;
-    font-family: 'Poppins', sans-serif;
-    font-size: 9px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.popup-present {
-    background: var(--green-soft);
-    color: var(--green);
-}
-
-.popup-absent {
-    background: var(--red-soft);
-    color: var(--red);
-}
-
-
-/* =========================================
-   LEGEND
-========================================= */
-
-.legend {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    margin-top: 18px;
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.legend-dot {
-    display: inline-block;
-    width: 7px;
-    height: 7px;
-    margin-right: 5px;
-    border-radius: 50%;
-}
-
-.legend-green { background: var(--green); }
-.legend-red { background: var(--red); }
-
-
-/* =========================================
-   ATTENDANCE CARD
-========================================= */
-
-.attendance-card {
-    padding: 22px;
-}
-
-.attendance-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-}
-
-.label {
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-}
-
-.percentage {
-    margin-top: 4px;
-    font-size: 42px;
-    font-weight: 800;
-    letter-spacing: -1.5px;
-}
-
-.percentage span {
-    color: var(--muted);
-    font-size: 20px;
-    letter-spacing: 0;
-}
-
-
-/* =========================================
-   STATUS BADGES
-========================================= */
-
-.status {
-    padding: 8px 12px;
-    border-radius: 12px;
-    font-size: 10px;
-    font-weight: 700;
-}
-
-.safe { background: var(--green-soft); color: var(--green); }
-.warning { background: #fff5dd; color: #a87816; }
-body.dark .warning { background: rgba(255, 190, 60, 0.15); color: #ffc85c; }
-.danger { background: var(--red-soft); color: var(--red); }
-
-
-/* =========================================
-   PROGRESS
-========================================= */
-
-.progress {
-    height: 10px;
-    margin: 16px 0;
-    background: var(--soft);
-    border-radius: 100px;
-    overflow: hidden;
-}
-
-.progress-fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #34d399, #10b981);
-    border-radius: 100px;
-    transition: width 0.35s ease;
-}
-
-
-/* =========================================
-   COUNTERS
-========================================= */
-
-.counters {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.counter {
-    padding: 12px 14px;
-    background: var(--soft);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-}
-
-.counter strong {
-    display: block;
-    font-size: 18px;
-    font-weight: 700;
-}
-
-.counter span {
-    color: var(--muted);
-    font-size: 10px;
-    font-weight: 500;
-}
-
-
-/* =========================================
-   TIP & BUTTONS
-========================================= */
-
-.tip {
-    margin-top: 14px;
-    padding: 12px 14px;
-    background: var(--purple-soft);
-    color: var(--purple);
-    border-radius: 14px;
-    font-size: 11px;
-    line-height: 1.5;
-    font-weight: 500;
-}
-
-.reset {
-    width: 100%;
-    margin-top: 14px;
-    padding: 11px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--card);
-    color: var(--muted);
-    font-family: 'Poppins', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-}
-
-
-/* =========================================
-   HISTORY & SETTINGS STYLES
-========================================= */
-
-.history-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-.history-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 14px;
-    background: var(--soft);
-    border-radius: 14px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.history-item .status-badge {
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: capitalize;
-}
-
-.setting-item {
-    margin-bottom: 20px;
-}
-
-.setting-item label {
-    display: block;
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--muted);
-    margin-bottom: 8px;
-}
-
-.setting-input {
-    width: 100%;
-    padding: 12px;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    background: var(--card);
-    color: var(--text);
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    font-weight: 600;
-    outline: none;
-}
-
-
-/* =========================================
-   BOTTOM NAV
-========================================= */
-
-.bottom-nav {
-    position: fixed;
-    left: 50%;
-    bottom: 0;
-    transform: translateX(-50%);
-    width: min(480px, 100%);
-    padding: 12px 20px calc(12px + env(safe-area-inset-bottom));
-    background: rgba(18, 11, 31, 0.75);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255, 255, 255, 0.12);
-    z-index: 100;
-}
-
-.nav {
-    display: flex;
-    justify-content: space-around;
-}
-
-.nav-item {
-    text-align: center;
-    color: rgba(255, 255, 255, 0.6);
-    font-size: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s ease;
-}
-
-.nav-icon {
-    margin-bottom: 2px;
-    font-size: 18px;
-}
-
-.nav-item.active {
-    color: #a855f7;
-}
-
-
-/* =========================================
-   MOBILE RESPONSIVENESS
-========================================= */
-
-@media (max-width: 360px) {
-    .attendance-popup { width: 100px; }
-    .attendance-popup button { font-size: 8px; }
-}
-
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Attendix | verma0x </title>
+  <style>
+    /* =========================================
+       CSS VARIABLES & THEME STYLES
+    ========================================= */
+    :root {
+      --bg-primary: #f8fafc;
+      --bg-card: #ffffff;
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --border-color: #e2e8f0;
+      --accent-color: #4f46e5;
+      --accent-glow: rgba(79, 70, 229, 0.4);
+      --present-bg: #dcfce7;
+      --present-text: #15803d;
+      --absent-bg: #fee2e2;
+      --absent-text: #b91c1c;
+    }
+
+    body.dark {
+      --bg-primary: #0f172a;
+      --bg-card: #1e293b;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --border-color: #334155;
+      --accent-color: #6366f1;
+      --accent-glow: rgba(99, 102, 241, 0.5);
+      --present-bg: #064e3b;
+      --present-text: #6ee7b7;
+      --absent-bg: #7f1d1d;
+      --absent-text: #fca5a5;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    /* =========================================
+       HEADER & ANIMATED LOGO / STREAK
+    ========================================= */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--bg-card);
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    /* Animated Glowing Attendix Logo */
+    .attendix-logo {
+      width: 36px;
+      height: 36px;
+      filter: drop-shadow(0 0 8px var(--accent-glow));
+      animation: pulseGlow 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% {
+        filter: drop-shadow(0 0 4px var(--accent-glow));
+        transform: scale(1);
+      }
+      50% {
+        filter: drop-shadow(0 0 14px var(--accent-color));
+        transform: scale(1.05);
+      }
+    }
+
+    .logo-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--accent-color), #a855f7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Animated Streak Fire */
+    .streak-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(249, 115, 22, 0.1);
+      border: 1px solid rgba(249, 115, 22, 0.3);
+      padding: 0.4rem 0.8rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      color: #f97316;
+    }
+
+    .fire-icon {
+      width: 22px;
+      height: 22px;
+      transform-origin: center bottom;
+      animation: flicker 1.2s infinite ease-in-out alternate;
+    }
+
+    @keyframes flicker {
+      0% {
+        transform: scale(0.95) rotate(-3deg);
+        filter: drop-shadow(0 0 2px #f97316);
+      }
+      50% {
+        transform: scale(1.1) rotate(3deg);
+        filter: drop-shadow(0 0 8px #ef4444);
+      }
+      100% {
+        transform: scale(1) rotate(-1deg);
+        filter: drop-shadow(0 0 5px #eab308);
+      }
+    }
+
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .btn-icon:hover {
+      background: var(--border-color);
+    }
+
+    /* =========================================
+       STATS DASHBOARD
+    ========================================= */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 0.8rem;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* =========================================
+       CALENDAR SECTION
+    ========================================= */
+    .calendar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .calendar-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 0.5rem;
+      margin-top: 1rem;
+      text-align: center;
+    }
+
+    .day-name {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding-bottom: 0.5rem;
+    }
+
+    .day-cell {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border-color);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .day-cell:hover {
+      border-color: var(--accent-color);
+    }
+
+    .day-cell.present {
+      background-color: var(--present-bg);
+      color: var(--present-text);
+      border-color: transparent;
+    }
+
+    .day-cell.absent {
+      background-color: var(--absent-bg);
+      color: var(--absent-text);
+      border-color: transparent;
+    }
+
+    /* Action Popup */
+    .action-popup {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      border-radius: 0.8rem;
+      padding: 0.75rem;
+      display: flex;
+      gap: 0.5rem;
+      z-index: 10;
+    }
+
+    .btn-action {
+      padding: 0.5rem 0.8rem;
+      border-radius: 0.4rem;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .btn-present { background: #22c55e; color: white; }
+    .btn-absent { background: #ef4444; color: white; }
+    .btn-clear { background: var(--border-color); color: var(--text-primary); }
+  </style>
 </head>
-
-
 <body>
 
-<div class="app">
+  <div class="container">
+    <header>
+      <div class="logo-container">
+        <!-- SVG Animated Attendix Logo -->
+        <svg class="attendix-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" class="text-indigo" style="color: var(--accent-color)" />
+          <path d="M30 52 L43 65 L70 35" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color)" />
+        </svg>
+        <span class="logo-title">Attendix</span>
+      </div>
 
-<!-- =====================================
-     HEADER
-===================================== -->
+      <div class="streak-badge">
+        <!-- Animated Flame SVG -->
+        <svg class="fire-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 23C16.4183 23 20 19.4183 20 15C20 10.5 16 7 14 3C13.5 6 11.5 8 9.5 8C7 8 5 6 5 6C4 9 4 11.5 4 15C4 19.4183 7.58172 23 12 23Z" fill="#F97316"/>
+          <path d="M12 23C14.2091 23 16 21.2091 16 19C16 16.5 14 14.5 13 12.5C12.5 14 11 15 9.5 15C8 15 7 14 7 14C6.5 15.5 6.5 17 6.5 19C6.5 21.2091 8.79086 23 12 23Z" fill="#FACC15"/>
+        </svg>
+        <span id="streakCount">0</span> Days
+      </div>
 
-<header>
-    <div class="brand">
-        <div class="logo">✓</div>
-        <div>
-            <h1>Attendix</h1>
-            <p>Smart attendance tracker</p>
-        </div>
+      <div class="controls">
+        <button class="btn-icon" id="themeButton" title="Toggle Theme">🌙</button>
+        <button class="btn-icon" id="resetButton" title="Reset History">🔄</button>
+      </div>
+    </header>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">Present</div>
+        <div class="stat-value" id="presentCount" style="color: #22c55e;">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Absent</div>
+        <div class="stat-value" id="absentCount" style="color: #ef4444;">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Rate</div>
+        <div class="stat-value" id="attendanceRate">0%</div>
+      </div>
     </div>
 
-    <div class="header-buttons">
-        <button class="header-btn" id="todayButton" title="Today">⌾</button>
-        <button class="header-btn" id="themeButton" title="Toggle theme">🌙</button>
+    <div class="calendar-card" id="calendarCard">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h2 id="monthYear">September 2026</h2>
+      </div>
+      <div class="calendar-grid" id="calendar">
+        <!-- Calendar days injected dynamically -->
+      </div>
     </div>
-</header>
-
-
-<!-- =====================================
-     VIEW 1: ATTENDANCE
-===================================== -->
-
-<main id="view-attendance" class="view active">
-
-    <!-- STREAK & QUOTE CARD -->
-    <section class="card streak-card">
-        <div class="streak-left">
-            <div class="fire-wrapper">
-                <span class="fire-icon">🔥</span>
-                <div class="fire-glow"></div>
-            </div>
-            <div class="streak-details">
-                <div class="streak-count" id="streakCount">0</div>
-                <div class="streak-label">Day Streak</div>
-            </div>
-        </div>
-        <div class="streak-divider"></div>
-        <div class="streak-quote-box">
-            <p class="streak-quote" id="streakQuote">"Consistency is the key to achieving your goals."</p>
-        </div>
-    </section>
-
-    <!-- CALENDAR CARD -->
-    <section class="card calendar-card">
-        <div class="calendar-top">
-            <div>
-                <div class="month" id="monthName"></div>
-                <span class="year" id="year"></span>
-            </div>
-            <div class="month-controls">
-                <button id="previousMonth">‹</button>
-                <button id="nextMonth">›</button>
-            </div>
-        </div>
-
-        <div class="weekdays">
-            <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
-        </div>
-
-        <div class="calendar" id="calendar"></div>
-
-        <div class="legend">
-            <span><i class="legend-dot legend-green"></i> Present</span>
-            <span><i class="legend-dot legend-red"></i> Absent</span>
-        </div>
-    </section>
-
-    <!-- ATTENDANCE SUMMARY -->
-    <section class="card attendance-card">
-        <div class="attendance-header">
-            <div>
-                <div class="label">Overall Attendance</div>
-                <div class="percentage" id="percentage">0<span>%</span></div>
-            </div>
-            <div class="status" id="status">No data</div>
-        </div>
-
-        <div class="progress">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-
-        <div class="counters">
-            <div class="counter">
-                <strong id="presentCount">0</strong>
-                <span>Present classes</span>
-            </div>
-            <div class="counter">
-                <strong id="absentCount">0</strong>
-                <span>Absent classes</span>
-            </div>
-        </div>
-
-        <div class="tip" id="tip">Select a date to mark your attendance.</div>
-        <button class="reset" id="resetButton">Reset all attendance</button>
-    </section>
-
-</main>
-
-
-<!-- =====================================
-     VIEW 2: HISTORY
-===================================== -->
-
-<main id="view-history" class="view" style="display: none;">
-    <section class="card attendance-card">
-        <div class="attendance-header" style="margin-bottom: 15px;">
-            <div class="label">Attendance Records</div>
-        </div>
-        <div id="historyList" class="history-list">
-            <!-- Dynamic Records -->
-        </div>
-    </section>
-</main>
-
-
-<!-- =====================================
-     VIEW 3: SETTINGS
-===================================== -->
-
-<main id="view-settings" class="view" style="display: none;">
-    <section class="card attendance-card">
-        <div class="attendance-header" style="margin-bottom: 15px;">
-            <div class="label">Preferences</div>
-        </div>
-
-        <div class="setting-item">
-            <label for="targetInput">Target Attendance Percentage</label>
-            <input type="number" id="targetInput" min="50" max="100" value="75" class="setting-input" />
-        </div>
-
-        <div class="setting-item">
-            <label>Export / Import Data</label>
-            <div style="display: flex; gap: 8px; margin-top: 6px;">
-                <button id="exportBtn" class="reset" style="margin-top: 0;">Export Data</button>
-                <button id="importBtn" class="reset" style="margin-top: 0;">Import Data</button>
-            </div>
-            <input type="file" id="importFile" accept=".json" style="display: none;" />
-        </div>
-    </section>
-</main>
-
-</div>
-
-
-<!-- =====================================
-     BOTTOM NAV
-===================================== -->
-
-<nav class="bottom-nav">
-    <div class="nav">
-        <div class="nav-item active" data-target="view-attendance">
-            <div class="nav-icon">▦</div>
-            Attendance
-        </div>
-        <div class="nav-item" data-target="view-history">
-            <div class="nav-icon">◷</div>
-            History
-        </div>
-        <div class="nav-item" data-target="view-settings">
-            <div class="nav-icon">⚙</div>
-            Settings
-        </div>
-    </div>
-</nav>
-
-
-<script>
-
-/* =========================================
-   STORAGE KEYS & DATA
-========================================= */
-
-const STORAGE_KEY = "attendixAttendance";
-const THEME_KEY = "attendixTheme";
-const SETTINGS_KEY = "attendixSettings";
-
-let attendance = JSON.parse(
-    localStorage.getItem(STORAGE_KEY) || "{}"
-);
-
-let settings = JSON.parse(
-    localStorage.getItem(SETTINGS_KEY) || '{"target": 75}'
-);
-
-let currentDate = new Date();
-let selectedDate = null;
-
-const MOTIVATIONAL_QUOTES = [
-    "Consistency is the key to achieving your goals.",
-    "Show up today, succeed tomorrow.",
-    "Small daily wins lead to big results.",
-    "Don't break the chain!",
-    "Success starts with simply showing up.",
-    "Your future self will thank you for today."
-];
-
-
-/* =========================================
-   ELEMENT HELPER
-========================================= */
-
-function $(id) {
-    return document.getElementById(id);
-}
-
-
-/* =========================================
-   DATE KEY
-========================================= */
-
-function makeKey(year, month, day) {
-    return (
-        year +
-        "-" +
-        String(month + 1).padStart(2, "0") +
-        "-" +
-        String(day).padStart(2, "0")
-    );
-}
-
-
-/* =========================================
-   SAVE DATA
-========================================= */
-
-function saveData() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(attendance));
-}
-
-
-/* =========================================
-   STREAK & QUOTE LOGIC
-========================================= */
-
-function calculateStreak() {
-    let streak = 0;
-    let checkDate = new Date();
-
-    function formatDate(d) {
-        return d.getFullYear() + "-" + 
-               String(d.getMonth() + 1).padStart(2, "0") + "-" + 
-               String(d.getDate()).padStart(2, "0");
-    }
-
-    let todayKey = formatDate(checkDate);
-
-    if (attendance[todayKey] !== "present") {
-        checkDate.setDate(checkDate.getDate() - 1);
-    }
-
-    while (true) {
-        let key = formatDate(checkDate);
-        if (attendance[key] === "present") {
-            streak++;
-            checkDate.setDate(checkDate.getDate() - 1);
-        } else {
-            break;
-        }
-    }
-
-    return streak;
-}
-
-function updateStreak() {
-    const streak = calculateStreak();
-    $("streakCount").textContent = streak;
-
-    const quoteIndex = streak % MOTIVATIONAL_QUOTES.length;
-    $("streakQuote").textContent = `"${MOTIVATIONAL_QUOTES[quoteIndex]}"`;
-}
-
-
-/* =========================================
-   RENDER CALENDAR
-========================================= */
-
-function renderCalendar() {
-
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
-
-    $("monthName").textContent = currentDate.toLocaleString("en-US", { month: "long" });
-    $("year").textContent = year;
-
-    const calendar = $("calendar");
-    calendar.innerHTML = "";
-
-    const firstDay = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-    for (let i = 0; i < firstDay; i++) {
-        const empty = document.createElement("div");
-        empty.className = "day";
-        calendar.appendChild(empty);
-    }
-
-    const today = new Date();
-
-    for (let day = 1; day <= daysInMonth; day++) {
-
-        const dateKey = makeKey(year, month, day);
-
-        const wrapper = document.createElement("div");
-        wrapper.className = "day-wrapper";
-
-        const button = document.createElement("button");
-        button.className = "day";
-        button.innerHTML = `<span>${day}</span>`;
-
-        if (attendance[dateKey]) {
-            button.classList.add(attendance[dateKey]);
-            const dot = document.createElement("span");
-            dot.className = "status-dot";
-            button.appendChild(dot);
-        }
-
-        if (
-            year === today.getFullYear() &&
-            month === today.getMonth() &&
-            day === today.getDate()
-        ) {
-            button.classList.add("today");
-        }
-
-        if (dateKey === selectedDate) {
-            button.classList.add("selected");
-            wrapper.classList.add("active");
-        }
-
-        const popup = document.createElement("div");
-        popup.className = "attendance-popup";
-
-        const present = document.createElement("button");
-        present.className = "popup-present";
-        present.textContent = "✓ Present";
-
-        present.addEventListener("click", function(event) {
-            event.stopPropagation();
-            markAttendance(dateKey, "present");
+  </div>
+
+  <script>
+    /* =========================================
+       STATE & DOM ELEMENTS
+    ========================================= */
+    const STORAGE_KEY = "attendix_data_v1";
+    const THEME_KEY = "attendix_theme";
+    
+    let attendance = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    let selectedDate = null;
+
+    const $ = (id) => document.getElementById(id);
+
+    /* =========================================
+       CALENDAR RENDER LOGIC
+    ========================================= */
+    function renderCalendar() {
+      const calendarEl = $("calendar");
+      calendarEl.innerHTML = "";
+
+      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      daysOfWeek.forEach(day => {
+        const dayHead = document.createElement("div");
+        dayHead.className = "day-name";
+        dayHead.textContent = day;
+        calendarEl.appendChild(dayHead);
+      });
+
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = today.getMonth();
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const totalDays = new Date(year, month + 1, 0).getDate();
+
+      // Empty padding cells
+      for (let i = 0; i < firstDay; i++) {
+        const emptyCell = document.createElement("div");
+        calendarEl.appendChild(emptyCell);
+      }
+
+      // Day cells
+      for (let day = 1; day <= totalDays; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const dayCell = document.createElement("div");
+        dayCell.className = "day-cell";
+        dayCell.textContent = day;
+
+        if (attendance[dateStr] === "P") dayCell.classList.add("present");
+        if (attendance[dateStr] === "A") dayCell.classList.add("absent");
+
+        dayCell.addEventListener("click", (e) => {
+          e.stopPropagation();
+          showActionPopup(dayCell, dateStr);
         });
 
-        const absent = document.createElement("button");
-        absent.className = "popup-absent";
-        absent.textContent = "✕ Absent";
-
-        absent.addEventListener("click", function(event) {
-            event.stopPropagation();
-            markAttendance(dateKey, "absent");
-        });
-
-        popup.appendChild(present);
-        popup.appendChild(absent);
-
-        wrapper.appendChild(button);
-        wrapper.appendChild(popup);
-        calendar.appendChild(wrapper);
-
-        button.addEventListener("click", function(event) {
-            event.stopPropagation();
-            selectDate(dateKey);
-        });
+        calendarEl.appendChild(dayCell);
+      }
     }
-}
 
+    function showActionPopup(targetEl, dateStr) {
+      removeExistingPopups();
 
-/* =========================================
-   SELECT & MARK
-========================================= */
+      const popup = document.createElement("div");
+      popup.className = "action-popup";
+      popup.innerHTML = `
+        <button class="btn-action btn-present" onclick="setAttendance('${dateStr}', 'P')">Present</button>
+        <button class="btn-action btn-absent" onclick="setAttendance('${dateStr}', 'A')">Absent</button>
+        <button class="btn-action btn-clear" onclick="setAttendance('${dateStr}', null)">Clear</button>
+      `;
 
-function selectDate(dateKey) {
-    if (selectedDate === dateKey) {
-        selectedDate = null;
-    } else {
-        selectedDate = dateKey;
+      targetEl.appendChild(popup);
     }
-    renderCalendar();
-}
 
-function markAttendance(dateKey, status) {
-    attendance[dateKey] = status;
-    selectedDate = dateKey;
-    saveData();
+    function removeExistingPopups() {
+      document.querySelectorAll(".action-popup").forEach(el => el.remove());
+    }
+
+    /* =========================================
+       ATTENDANCE & STATISTICS ENGINE
+    ========================================= */
+    function setAttendance(dateStr, status) {
+      if (status === null) {
+        delete attendance[dateStr];
+      } else {
+        attendance[dateStr] = status;
+      }
+      saveData();
+      renderCalendar();
+      updateStatistics();
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(attendance));
+    }
+
+    function updateStatistics() {
+      const values = Object.values(attendance);
+      const presentCount = values.filter(val => val === "P").length;
+      const absentCount = values.filter(val => val === "A").length;
+      const totalRecorded = presentCount + absentCount;
+
+      $("presentCount").textContent = presentCount;
+      $("absentCount").textContent = absentCount;
+      
+      const rate = totalRecorded > 0 ? Math.round((presentCount / totalRecorded) * 100) : 0;
+      $("attendanceRate").textContent = `${rate}%`;
+
+      // Calculate streak
+      let streak = 0;
+      const sortedDates = Object.keys(attendance).sort().reverse();
+      for (let date of sortedDates) {
+        if (attendance[date] === "P") {
+          streak++;
+        } else if (attendance[date] === "A") {
+          break;
+        }
+      }
+      $("streakCount").textContent = streak;
+    }
+
+    /* =========================================
+       THEME & SYSTEM CONTROLS
+    ========================================= */
+    function updateThemeIcon() {
+      const isDark = document.body.classList.contains("dark");
+      $("themeButton").textContent = isDark ? "☀️" : "🌙";
+    }
+
+    // Load theme preference
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    if (savedTheme === "dark") {
+      document.body.classList.add("dark");
+    }
+    updateThemeIcon();
+
+    // Theme toggle handler
+    $("themeButton").addEventListener("click", function() {
+      document.body.classList.toggle("dark");
+      const isDark = document.body.classList.contains("dark");
+      localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
+      updateThemeIcon();
+    });
+
+    // Reset button handler
+    $("resetButton").addEventListener("click", function() {
+      if (confirm("Are you sure you want to clear all attendance history?")) {
+        attendance = {};
+        saveData();
+        renderCalendar();
+        updateStatistics();
+      }
+    });
+
+    // Deselect popup on outside click
+    document.addEventListener("click", function(event) {
+      if (!event.target.closest("#calendar")) {
+        removeExistingPopups();
+      }
+    });
+
+    /* =========================================
+       INITIALIZATION
+    ========================================= */
     renderCalendar();
     updateStatistics();
-}
-
-
-/* =========================================
-   UPDATE STATISTICS
-========================================= */
-
-function updateStatistics() {
-
-    const values = Object.values(attendance);
-
-    const present = values.filter(value => value === "present").length;
-    const absent = values.filter(value => value === "absent").length;
-    const total = present + absent;
-
-    let percentage = 0;
-    if (total > 0) {
-        percentage = (present / total) * 100;
-    }
-
-    $("presentCount").textContent = present;
-    $("absentCount").textContent = absent;
-
-    $("percentage").innerHTML = (total ? percentage.toFixed(1) : "0") + "<span>%</span>";
-    $("progressFill").style.width = percentage + "%";
-
-    const status = $("status");
-    status.className = "status";
-
-    const targetPct = settings.target || 75;
-    const warningPct = Math.max(targetPct - 15, 50);
-
-    if (total === 0) {
-        status.textContent = "No data";
-        $("tip").textContent = "Select a date to mark your attendance.";
-    } else if (percentage >= targetPct) {
-        status.textContent = "✓ Safe";
-        status.classList.add("safe");
-        $("tip").textContent = `Great! Your attendance is above the ${targetPct}% target.`;
-    } else if (percentage >= warningPct) {
-        status.textContent = "⚠ Attention";
-        status.classList.add("warning");
-        $("tip").textContent = `Your attendance is getting close to the ${targetPct}% target.`;
-    } else {
-        status.textContent = "✕ Low";
-        status.classList.add("danger");
-        $("tip").textContent = `Your attendance is below ${targetPct}%. Try to attend upcoming classes.`;
-    }
-
-    updateStreak();
-}
-
-
-/* =========================================
-   TAB SWITCHING LOGIC
-========================================= */
-
-document.querySelectorAll(".nav-item").forEach(item => {
-    item.addEventListener("click", function() {
-        document.querySelectorAll(".nav-item").forEach(nav => nav.classList.remove("active"));
-        this.classList.add("active");
-
-        const targetViewId = this.getAttribute("data-target");
-        document.querySelectorAll(".view").forEach(view => {
-            view.style.display = view.id === targetViewId ? "block" : "none";
-        });
-
-        if (targetViewId === "view-history") renderHistory();
-        if (targetViewId === "view-settings") loadSettingsView();
-    });
-});
-
-
-/* =========================================
-   RENDER HISTORY VIEW
-========================================= */
-
-function renderHistory() {
-    const historyList = $("historyList");
-    historyList.innerHTML = "";
-
-    const keys = Object.keys(attendance).sort().reverse();
-
-    if (keys.length === 0) {
-        historyList.innerHTML = `<div style="text-align:center; padding: 20px; color: var(--muted); font-size:11px;">No records marked yet.</div>`;
-        return;
-    }
-
-    keys.forEach(dateKey => {
-        const status = attendance[dateKey];
-        const row = document.createElement("div");
-        row.className = "history-item";
-
-        const badgeClass = status === "present" ? "safe" : "danger";
-        const symbol = status === "present" ? "✓" : "✕";
-
-        row.innerHTML = `
-            <span>${dateKey}</span>
-            <span class="status-badge ${badgeClass}">${symbol} ${status}</span>
-        `;
-        historyList.appendChild(row);
-    });
-}
-
-
-/* =========================================
-   SETTINGS & DATA MANAGEMENT
-========================================= */
-
-function loadSettingsView() {
-    $("targetInput").value = settings.target || 75;
-}
-
-$("targetInput").addEventListener("change", function() {
-    const val = parseInt(this.value, 10);
-    if (!isNaN(val) && val >= 1 && val <= 100) {
-        settings.target = val;
-        localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
-        updateStatistics();
-    }
-});
-
-/* EXPORT DATA */
-$("exportBtn").addEventListener("click", function() {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(attendance));
-    const downloadAnchor = document.createElement("a");
-    downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", `attendix_backup_${new Date().toISOString().slice(0,10)}.json`);
-    document.body.appendChild(downloadAnchor);
-    downloadAnchor.click();
-    downloadAnchor.remove();
-});
-
-/* IMPORT DATA */
-$("importBtn").addEventListener("click", () => $("importFile").click());
-
-$("importFile").addEventListener("change", function(e) {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-        try {
-            const importedData = JSON.parse(evt.target.result);
-            if (typeof importedData === "object") {
-                attendance = importedData;
-                saveData();
-                renderCalendar();
-                updateStatistics();
-                alert("Attendance data imported successfully!");
-            }
-        } catch (err) {
-            alert("Invalid JSON file structure.");
-        }
-    };
-    reader.readAsText(file);
-});
-
-
-/* =========================================
-   MONTH CONTROLS & HEADER
-========================================= */
-
-$("previousMonth").addEventListener("click", function() {
-    currentDate.setMonth(currentDate.getMonth() - 1);
-    selectedDate = null;
-    renderCalendar();
-});
-
-$("nextMonth").addEventListener("click", function() {
-    currentDate.setMonth(currentDate.getMonth() + 1);
-    selectedDate = null;
-    renderCalendar();
-});
-
-$("todayButton").addEventListener("click", function() {
-    currentDate = new Date();
-    selectedDate = null;
-    renderCalendar();
-});
-
-
-/* =========================================
-   DARK MODE CONTROLS
-========================================= */
-
-function updateThemeIcon() {
-    if (document.body.classList.contains("dark")) {
-        $("themeButton").textContent = "☀️";
-    } else {
-        $("themeButton").textContent = "🌙";
-    }
-}
-
-const savedTheme = localStorage.getItem(THEME_KEY);
-if (savedTheme === "dark") {
-    document.body.classList.add("dark");
-}
-updateThemeIcon();
-
-$("themeButton").addEventListener("click", function() {
-    document.body.classList.toggle("dark");
-    const isDark = document.body.classList.contains("dark");
-    localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
-    updateThemeIcon();
-});
-
-
-/* =========================================
-   RESET ATTENDANCE
-========================================= */
-
-$("resetButton").addEventListener("click", function() {
-    if (confirm("Reset all attendance data?")) {
-        attendance = {};
-        selectedDate = null;
-        localStorage.removeItem(STORAGE_KEY);
-        renderCalendar();
-        updateStatistics();
-    }
-});
-
-
-/* =========================================
-   CLOSE POPUP ON OUTSIDE CLICK
-========================================= */
-
-document.addEventListener("click", function() {
-    if (selectedDate !== null) {
-        selectedDate = null;
-        renderCalendar();
-    }
-});
-
-
-/* =========================================
-   START APP
-========================================= */
-
-renderCalendar();
-updateStatistics();
-
-</script>
-
+  </script>
 </body>
 </html>
