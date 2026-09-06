@@ -540,6 +540,10 @@
     <div class="calendar-card" id="calendarCard">
       <div style="display: flex; justify-content: space-between; align-items: center;">
         <h2 id="monthYear">Month Year</h2>
+        <div class="controls">
+          <button class="btn-icon" id="prevMonthBtn" title="Previous Month">◀</button>
+          <button class="btn-icon" id="nextMonthBtn" title="Next Month">▶</button>
+        </div>
       </div>
       <div class="calendar-grid" id="calendar">
         <!-- Calendar days injected dynamically -->
@@ -559,9 +563,10 @@
     let notifySettings = JSON.parse(localStorage.getItem(NOTIFY_KEY)) || { enabled: false, time: "20:00" };
     let reminderTimeout = null;
 
+    let viewDate = new Date();
+
     const $ = (id) => document.getElementById(id);
 
-    // Get Today's YYYY-MM-DD string
     function getTodayString() {
       const today = new Date();
       const yyyy = today.getFullYear();
@@ -679,7 +684,6 @@
       const scheduledTime = new Date();
       scheduledTime.setHours(hours, minutes, 0, 0);
 
-      // If scheduled time already passed today, set for tomorrow
       if (now >= scheduledTime) {
         scheduledTime.setDate(scheduledTime.getDate() + 1);
       }
@@ -688,7 +692,7 @@
 
       reminderTimeout = setTimeout(() => {
         sendNotification();
-        scheduleDailyReminder(); // Reschedule for next day
+        scheduleDailyReminder();
       }, delay);
     }
 
@@ -717,23 +721,20 @@
         calendarEl.appendChild(dayHead);
       });
 
-      const today = new Date();
-      const year = today.getFullYear();
-      const month = today.getMonth();
+      const year = viewDate.getFullYear();
+      const month = viewDate.getMonth();
 
-      $("monthYear").textContent = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      $("monthYear").textContent = viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
       const firstDay = new Date(year, month, 1).getDay();
       const totalDays = new Date(year, month + 1, 0).getDate();
       const todayStr = getTodayString();
 
-      // Empty padding cells
       for (let i = 0; i < firstDay; i++) {
         const emptyCell = document.createElement("div");
         calendarEl.appendChild(emptyCell);
       }
 
-      // Day cells
       for (let day = 1; day <= totalDays; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const dayCell = document.createElement("div");
@@ -805,16 +806,25 @@
       const rate = totalRecorded > 0 ? Math.round((presentCount / totalRecorded) * 100) : 0;
       $("attendanceRate").textContent = `${rate}%`;
 
-      // Calculate streak
       let streak = 0;
-      const sortedDates = Object.keys(attendance).sort().reverse();
-      for (let date of sortedDates) {
-        if (attendance[date] === "P") {
+      let checkDate = new Date();
+      
+      while (true) {
+        const yyyy = checkDate.getFullYear();
+        const mm = String(checkDate.getMonth() + 1).padStart(2, '0');
+        const dd = String(checkDate.getDate()).padStart(2, '0');
+        const dateStr = `${yyyy}-${mm}-${dd}`;
+
+        if (attendance[dateStr] === "P") {
           streak++;
-        } else if (attendance[date] === "A") {
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else if (dateStr === getTodayString() && !attendance[dateStr]) {
+          checkDate.setDate(checkDate.getDate() - 1);
+        } else {
           break;
         }
       }
+      
       $("streakCount").textContent = streak;
     }
 
@@ -826,14 +836,12 @@
       $("themeButton").textContent = isDark ? "☀️" : "🌙";
     }
 
-    // Load theme preference
     const savedTheme = localStorage.getItem(THEME_KEY);
     if (savedTheme === "dark") {
       document.body.classList.add("dark");
     }
     updateThemeIcon();
 
-    // Theme toggle handler
     $("themeButton").addEventListener("click", function() {
       document.body.classList.toggle("dark");
       const isDark = document.body.classList.contains("dark");
@@ -841,7 +849,6 @@
       updateThemeIcon();
     });
 
-    // Reset button handler
     $("resetButton").addEventListener("click", function() {
       if (confirm("Are you sure you want to clear all attendance history?")) {
         attendance = {};
@@ -852,7 +859,16 @@
       }
     });
 
-    // Deselect popup on outside click
+    $("prevMonthBtn").addEventListener("click", () => {
+      viewDate.setMonth(viewDate.getMonth() - 1);
+      renderCalendar();
+    });
+
+    $("nextMonthBtn").addEventListener("click", () => {
+      viewDate.setMonth(viewDate.getMonth() + 1);
+      renderCalendar();
+    });
+
     document.addEventListener("click", function(event) {
       if (!event.target.closest("#calendar")) {
         removeExistingPopups();
