@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attendix | verma0x </title>
+  <title>Attendix Tracker</title>
   <style>
     /* =========================================
        CSS VARIABLES & THEME STYLES
@@ -59,7 +59,7 @@
       max-width: 600px;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 1.25rem;
     }
 
     /* =========================================
@@ -73,7 +73,7 @@
       padding: 1rem 1.5rem;
       border-radius: 1rem;
       border: 1px solid var(--border-color);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
     .logo-container {
@@ -82,7 +82,6 @@
       gap: 0.75rem;
     }
 
-    /* Animated Glowing Attendix Logo */
     .attendix-logo {
       width: 36px;
       height: 36px;
@@ -109,7 +108,6 @@
       -webkit-text-fill-color: transparent;
     }
 
-    /* Animated Streak Fire */
     .streak-badge {
       display: flex;
       align-items: center;
@@ -165,6 +163,180 @@
 
     .btn-icon:hover {
       background: var(--border-color);
+    }
+
+    /* =========================================
+       QUICK-MARK TODAY CARD
+    ========================================= */
+    .today-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .today-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .today-title-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .today-title {
+      font-weight: 800;
+      font-size: 1.1rem;
+    }
+
+    .badge-today {
+      background: var(--accent-color);
+      color: white;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .today-date-text {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .today-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .btn-quick {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.6rem 1rem;
+      border-radius: 0.6rem;
+      border: none;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+      transition: transform 0.1s ease, opacity 0.2s ease;
+    }
+
+    .btn-quick:active {
+      transform: scale(0.96);
+    }
+
+    .btn-quick-p {
+      background: #22c55e;
+      color: #ffffff;
+    }
+
+    .btn-quick-a {
+      background: #ef4444;
+      color: #ffffff;
+    }
+
+    .btn-quick-selected {
+      outline: 2px solid var(--text-primary);
+      outline-offset: 2px;
+    }
+
+    /* =========================================
+       NOTIFICATION SETTINGS PANEL
+    ========================================= */
+    .settings-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .settings-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .settings-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 44px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: var(--border-color);
+      transition: .3s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(20px);
+    }
+
+    .time-picker-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 0.5rem;
+      border-top: 1px dashed var(--border-color);
+    }
+
+    .time-input {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 0.5rem;
+      padding: 0.4rem 0.6rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      outline: none;
     }
 
     /* =========================================
@@ -240,6 +412,11 @@
       border-color: var(--accent-color);
     }
 
+    .day-cell.today-highlight {
+      border: 2px solid var(--accent-color);
+      font-weight: 800;
+    }
+
     .day-cell.present {
       background-color: var(--present-bg);
       color: var(--present-text);
@@ -288,7 +465,7 @@
       <div class="logo-container">
         <!-- SVG Animated Attendix Logo -->
         <svg class="attendix-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" class="text-indigo" style="color: var(--accent-color)" />
+          <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" style="color: var(--accent-color)" />
           <path d="M30 52 L43 65 L70 35" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color)" />
         </svg>
         <span class="logo-title">Attendix</span>
@@ -309,6 +486,41 @@
       </div>
     </header>
 
+    <!-- QUICK-MARK TODAY CARD -->
+    <div class="today-card">
+      <div class="today-info">
+        <div class="today-title-row">
+          <span class="today-title">Today's Entry</span>
+          <span class="badge-today">Today</span>
+        </div>
+        <span class="today-date-text" id="todayFormattedDate">Loading date...</span>
+      </div>
+      <div class="today-actions">
+        <button class="btn-quick btn-quick-p" id="quickPresentBtn">
+          ✓ Present
+        </button>
+        <button class="btn-quick btn-quick-a" id="quickAbsentBtn">
+          ✕ Absent
+        </button>
+      </div>
+    </div>
+
+    <!-- DAILY REMINDERS & NOTIFICATION SETTINGS -->
+    <div class="settings-card">
+      <div class="settings-header">
+        <span class="settings-title">🔔 Daily Attendance Reminder</span>
+        <label class="switch">
+          <input type="checkbox" id="notifyToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <div class="time-picker-row" id="timeRow" style="display: none;">
+        <span style="font-size: 0.85rem; color: var(--text-secondary);">Reminder Time</span>
+        <input type="time" class="time-input" id="notifyTime" value="20:00">
+      </div>
+    </div>
+
+    <!-- STATS DASHBOARD -->
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-label">Present</div>
@@ -324,9 +536,10 @@
       </div>
     </div>
 
+    <!-- CALENDAR -->
     <div class="calendar-card" id="calendarCard">
       <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 id="monthYear">September 2026</h2>
+        <h2 id="monthYear">Month Year</h2>
       </div>
       <div class="calendar-grid" id="calendar">
         <!-- Calendar days injected dynamically -->
@@ -336,15 +549,158 @@
 
   <script>
     /* =========================================
-       STATE & DOM ELEMENTS
+       STATE & STORAGE KEYS
     ========================================= */
     const STORAGE_KEY = "attendix_data_v1";
     const THEME_KEY = "attendix_theme";
+    const NOTIFY_KEY = "attendix_notify_settings";
     
     let attendance = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    let selectedDate = null;
+    let notifySettings = JSON.parse(localStorage.getItem(NOTIFY_KEY)) || { enabled: false, time: "20:00" };
+    let reminderTimeout = null;
 
     const $ = (id) => document.getElementById(id);
+
+    // Get Today's YYYY-MM-DD string
+    function getTodayString() {
+      const today = new Date();
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      return `${yyyy}-${mm}-${dd}`;
+    }
+
+    /* =========================================
+       QUICK-MARK TODAY LOGIC
+    ========================================= */
+    function initTodayCard() {
+      const today = new Date();
+      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
+      $("todayFormattedDate").textContent = today.toLocaleDateString('en-US', options);
+
+      updateTodayCardUI();
+
+      $("quickPresentBtn").onclick = () => toggleTodayStatus('P');
+      $("quickAbsentBtn").onclick = () => toggleTodayStatus('A');
+    }
+
+    function toggleTodayStatus(status) {
+      const todayStr = getTodayString();
+      if (attendance[todayStr] === status) {
+        delete attendance[todayStr];
+      } else {
+        attendance[todayStr] = status;
+      }
+      saveData();
+      renderCalendar();
+      updateStatistics();
+      updateTodayCardUI();
+    }
+
+    function updateTodayCardUI() {
+      const todayStr = getTodayString();
+      const currentStatus = attendance[todayStr];
+
+      const btnP = $("quickPresentBtn");
+      const btnA = $("quickAbsentBtn");
+
+      btnP.classList.remove("btn-quick-selected");
+      btnA.classList.remove("btn-quick-selected");
+
+      if (currentStatus === 'P') {
+        btnP.classList.add("btn-quick-selected");
+      } else if (currentStatus === 'A') {
+        btnA.classList.add("btn-quick-selected");
+      }
+    }
+
+    /* =========================================
+       DAILY NOTIFICATIONS SYSTEM
+    ========================================= */
+    function initNotificationSettings() {
+      const toggle = $("notifyToggle");
+      const timeInput = $("notifyTime");
+      const timeRow = $("timeRow");
+
+      toggle.checked = notifySettings.enabled;
+      timeInput.value = notifySettings.time || "20:00";
+      timeRow.style.display = notifySettings.enabled ? "flex" : "none";
+
+      toggle.addEventListener("change", async function() {
+        if (this.checked) {
+          const granted = await requestNotificationPermission();
+          if (!granted) {
+            this.checked = false;
+            alert("Notification permission was denied in your browser settings.");
+            return;
+          }
+          notifySettings.enabled = true;
+          timeRow.style.display = "flex";
+        } else {
+          notifySettings.enabled = false;
+          timeRow.style.display = "none";
+        }
+        saveNotificationSettings();
+      });
+
+      timeInput.addEventListener("change", function() {
+        notifySettings.time = this.value;
+        saveNotificationSettings();
+      });
+
+      scheduleDailyReminder();
+    }
+
+    async function requestNotificationPermission() {
+      if (!("Notification" in window)) {
+        alert("This browser does not support desktop notifications.");
+        return false;
+      }
+      if (Notification.permission === "granted") return true;
+      if (Notification.permission !== "denied") {
+        const permission = await Notification.requestPermission();
+        return permission === "granted";
+      }
+      return false;
+    }
+
+    function saveNotificationSettings() {
+      localStorage.setItem(NOTIFY_KEY, JSON.stringify(notifySettings));
+      scheduleDailyReminder();
+    }
+
+    function scheduleDailyReminder() {
+      if (reminderTimeout) clearTimeout(reminderTimeout);
+
+      if (!notifySettings.enabled || Notification.permission !== "granted") return;
+
+      const [hours, minutes] = notifySettings.time.split(":").map(Number);
+      const now = new Date();
+      const scheduledTime = new Date();
+      scheduledTime.setHours(hours, minutes, 0, 0);
+
+      // If scheduled time already passed today, set for tomorrow
+      if (now >= scheduledTime) {
+        scheduledTime.setDate(scheduledTime.getDate() + 1);
+      }
+
+      const delay = scheduledTime.getTime() - now.getTime();
+
+      reminderTimeout = setTimeout(() => {
+        sendNotification();
+        scheduleDailyReminder(); // Reschedule for next day
+      }, delay);
+    }
+
+    function sendNotification() {
+      const todayStr = getTodayString();
+      if (!attendance[todayStr]) {
+        new Notification("Attendix Reminder 🔥", {
+          body: "Don't forget to mark your attendance for today!",
+          icon: "https://cdn-icons-png.flaticon.com/512/3652/3652191.png"
+        });
+      }
+    }
 
     /* =========================================
        CALENDAR RENDER LOGIC
@@ -365,8 +721,11 @@
       const year = today.getFullYear();
       const month = today.getMonth();
 
+      $("monthYear").textContent = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+
       const firstDay = new Date(year, month, 1).getDay();
       const totalDays = new Date(year, month + 1, 0).getDate();
+      const todayStr = getTodayString();
 
       // Empty padding cells
       for (let i = 0; i < firstDay; i++) {
@@ -380,6 +739,10 @@
         const dayCell = document.createElement("div");
         dayCell.className = "day-cell";
         dayCell.textContent = day;
+
+        if (dateStr === todayStr) {
+          dayCell.classList.add("today-highlight");
+        }
 
         if (attendance[dateStr] === "P") dayCell.classList.add("present");
         if (attendance[dateStr] === "A") dayCell.classList.add("absent");
@@ -423,6 +786,7 @@
       saveData();
       renderCalendar();
       updateStatistics();
+      updateTodayCardUI();
     }
 
     function saveData() {
@@ -484,6 +848,7 @@
         saveData();
         renderCalendar();
         updateStatistics();
+        updateTodayCardUI();
       }
     });
 
@@ -497,6 +862,8 @@
     /* =========================================
        INITIALIZATION
     ========================================= */
+    initTodayCard();
+    initNotificationSettings();
     renderCalendar();
     updateStatistics();
   </script>
