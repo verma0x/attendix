@@ -1,1027 +1,767 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attendix Tracker</title>
-  <style>
-    /* =========================================
-       CSS VARIABLES & THEME STYLES
-    ========================================= */
-    :root {
-      --bg-primary: #f8fafc;
-      --bg-card: #ffffff;
-      --text-primary: #0f172a;
-      --text-secondary: #64748b;
-      --border-color: #e2e8f0;
-      --accent-color: #4f46e5;
-      --accent-glow: rgba(79, 70, 229, 0.4);
-      --present-bg: #dcfce7;
-      --present-text: #15803d;
-      --absent-bg: #fee2e2;
-      --absent-text: #b91c1c;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendix</title>
 
-    body.dark {
-      --bg-primary: #0f172a;
-      --bg-card: #1e293b;
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --border-color: #334155;
-      --accent-color: #6366f1;
-      --accent-glow: rgba(99, 102, 241, 0.5);
-      --present-bg: #064e3b;
-      --present-text: #6ee7b7;
-      --absent-bg: #7f1d1d;
-      --absent-text: #fca5a5;
-    }
+<style>
+/* =========================================
+   RESET
+========================================= */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-    }
+/* =========================================
+   LIGHT THEME
+========================================= */
+:root {
+    --bg: #f7f7fb;
+    --card: #ffffff;
+    --text: #171820;
+    --muted: #8c8d9b;
+    --purple: #6657e8;
+    --purple-soft: rgba(102, 87, 232, 0.09);
+    --green: #2fb477;
+    --green-soft: #e8f8f0;
+    --red: #e65b5b;
+    --red-soft: #fdecec;
+    --border: #ececf2;
+    --soft: #f5f4fa;
+}
 
-    body {
-      background-color: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 2rem 1rem;
-    }
+/* =========================================
+   DARK THEME
+========================================= */
+body.dark {
+    --bg: #0f1016;
+    --card: #181922;
+    --text: #f4f4f7;
+    --muted: #9294a3;
+    --purple: #8275f5;
+    --purple-soft: rgba(130, 117, 245, 0.12);
+    --green: #3bc98b;
+    --green-soft: rgba(59, 201, 139, 0.13);
+    --red: #ff7070;
+    --red-soft: rgba(255, 112, 112, 0.13);
+    --border: #292b36;
+    --soft: #22232d;
+}
 
-    .container {
-      width: 100%;
-      max-width: 600px;
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem;
-    }
+/* =========================================
+   BODY
+========================================= */
+body {
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: background 0.25s ease, color 0.25s ease;
+}
 
-    /* =========================================
-       HEADER & ANIMATED LOGO / STREAK
-    ========================================= */
-    header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: var(--bg-card);
-      padding: 1rem 1.5rem;
-      border-radius: 1rem;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    }
+/* =========================================
+   APP
+========================================= */
+.app {
+    width: 100%;
+    max-width: 480px;
+    margin: auto;
+    padding: 20px 16px 100px;
+}
 
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
+/* =========================================
+   HEADER
+========================================= */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
 
-    .attendix-logo {
-      width: 36px;
-      height: 36px;
-      filter: drop-shadow(0 0 8px var(--accent-glow));
-      animation: pulseGlow 2.5s infinite ease-in-out;
-    }
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
 
-    @keyframes pulseGlow {
-      0%, 100% {
-        filter: drop-shadow(0 0 4px var(--accent-glow));
-        transform: scale(1);
-      }
-      50% {
-        filter: drop-shadow(0 0 14px var(--accent-color));
-        transform: scale(1.05);
-      }
-    }
+.logo {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: var(--purple);
+    color: white;
+    font-size: 22px;
+    font-weight: 900;
+    box-shadow: 0 8px 20px rgba(102, 87, 232, 0.25);
+}
 
-    .logo-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      background: linear-gradient(135deg, var(--accent-color), #a855f7);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+.brand h1 {
+    font-size: 23px;
+    letter-spacing: -0.5px;
+}
 
-    .streak-badge {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      background: rgba(249, 115, 22, 0.1);
-      border: 1px solid rgba(249, 115, 22, 0.3);
-      padding: 0.4rem 0.8rem;
-      border-radius: 2rem;
-      font-weight: 700;
-      color: #f97316;
-    }
+.brand p {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10px;
+}
 
-    .fire-icon {
-      width: 22px;
-      height: 22px;
-      transform-origin: center bottom;
-      animation: flicker 1.2s infinite ease-in-out alternate;
-    }
+/* =========================================
+   HEADER BUTTONS
+========================================= */
+.header-buttons {
+    display: flex;
+    gap: 7px;
+}
 
-    @keyframes flicker {
-      0% {
-        transform: scale(0.95) rotate(-3deg);
-        filter: drop-shadow(0 0 2px #f97316);
-      }
-      50% {
-        transform: scale(1.1) rotate(3deg);
-        filter: drop-shadow(0 0 8px #ef4444);
-      }
-      100% {
-        transform: scale(1) rotate(-1deg);
-        filter: drop-shadow(0 0 5px #eab308);
-      }
-    }
+.header-btn {
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    background: var(--card);
+    color: var(--purple);
+    font-size: 17px;
+    cursor: pointer;
+    transition: 0.2s;
+}
 
-    .controls {
-      display: flex;
-      gap: 0.5rem;
-    }
+.header-btn:active {
+    transform: scale(0.9);
+}
 
-    .btn-icon {
-      background: transparent;
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-    }
+/* =========================================
+   CARD
+========================================= */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 22px;
+    box-shadow: 0 10px 30px rgba(30, 28, 70, 0.06);
+    transition: background 0.25s ease, border 0.25s ease;
+}
 
-    .btn-icon:hover {
-      background: var(--border-color);
-    }
+/* =========================================
+   CALENDAR CARD
+========================================= */
+.calendar-card {
+    padding: 18px;
+    margin-bottom: 15px;
+}
 
-    /* =========================================
-       QUICK-MARK TODAY CARD
-    ========================================= */
-    .today-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 1rem;
-      padding: 1.25rem 1.5rem;
-      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
+.calendar-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
 
-    .today-info {
-      display: flex;
-      flex-direction: column;
-      gap: 0.25rem;
-    }
+.month {
+    font-size: 18px;
+    font-weight: 800;
+}
 
-    .today-title-row {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+.year {
+    display: block;
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 10px;
+}
 
-    .today-title {
-      font-weight: 800;
-      font-size: 1.1rem;
-    }
+.month-controls {
+    display: flex;
+    gap: 5px;
+}
 
-    .badge-today {
-      background: var(--accent-color);
-      color: white;
-      font-size: 0.65rem;
-      font-weight: 700;
-      padding: 0.15rem 0.5rem;
-      border-radius: 1rem;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+.month-controls button {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 10px;
+    background: var(--soft);
+    color: var(--text);
+    font-size: 18px;
+    cursor: pointer;
+}
 
-    .today-date-text {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-    }
+/* =========================================
+   WEEK DAYS & GRID
+========================================= */
+.weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    margin-bottom: 6px;
+}
 
-    .today-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
+.weekdays div {
+    text-align: center;
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 800;
+}
 
-    .btn-quick {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.6rem 1rem;
-      border-radius: 0.6rem;
-      border: none;
-      font-weight: 700;
-      font-size: 0.875rem;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-      transition: transform 0.1s ease, opacity 0.2s ease;
-    }
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
 
-    .btn-quick:active {
-      transform: scale(0.96);
-    }
+.day-wrapper {
+    position: relative;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+}
 
-    .btn-quick-p {
-      background: #22c55e;
-      color: #ffffff;
-    }
+.day {
+    width: 100%;
+    height: 48px;
+    border: none;
+    border-radius: 14px;
+    background: transparent;
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 750;
+    cursor: pointer;
+    position: relative;
+    transition: 0.15s;
+}
 
-    .btn-quick-a {
-      background: #ef4444;
-      color: #ffffff;
-    }
+.day:active {
+    transform: scale(0.92);
+}
 
-    .btn-quick-selected {
-      outline: 2px solid var(--text-primary);
-      outline-offset: 2px;
-    }
+.day.today {
+    background: rgba(102, 87, 232, 0.08);
+    color: var(--purple);
+    box-shadow: inset 0 0 0 1.5px rgba(102, 87, 232, 0.4);
+}
 
-    /* =========================================
-       NOTIFICATION SETTINGS PANEL
-    ========================================= */
-    .settings-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 1rem;
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
+.day.present {
+    background: var(--green-soft);
+    color: var(--green);
+}
 
-    .settings-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.day.absent {
+    background: var(--red-soft);
+    color: var(--red);
+}
 
-    .settings-title {
-      font-size: 0.95rem;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
+.day.selected {
+    box-shadow: inset 0 0 0 2px var(--purple);
+    transform: scale(0.94);
+    z-index: 10;
+}
 
-    .switch {
-      position: relative;
-      display: inline-block;
-      width: 44px;
-      height: 24px;
-    }
+.status-dot {
+    position: absolute;
+    width: 5px;
+    height: 5px;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+}
 
-    .switch input {
-      opacity: 0;
-      width: 0;
-      height: 0;
-    }
+.day.present .status-dot { background: var(--green); }
+.day.absent .status-dot { background: var(--red); }
 
-    .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-color: var(--border-color);
-      transition: .3s;
-      border-radius: 24px;
-    }
+/* =========================================
+   ATTENDANCE POPUP
+========================================= */
+.attendance-popup {
+    position: absolute;
+    top: 53px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: none;
+    width: 112px;
+    padding: 5px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18);
+}
 
-    .slider:before {
-      position: absolute;
-      content: "";
-      height: 18px;
-      width: 18px;
-      left: 3px;
-      bottom: 3px;
-      background-color: white;
-      transition: .3s;
-      border-radius: 50%;
-    }
+.day-wrapper.active .attendance-popup {
+    display: flex;
+    gap: 4px;
+    animation: popupIn 0.16s ease;
+}
 
-    input:checked + .slider {
-      background-color: var(--accent-color);
+@keyframes popupIn {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-4px) scale(0.95);
     }
-
-    input:checked + .slider:before {
-      transform: translateX(20px);
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0) scale(1);
     }
+}
 
-    .time-picker-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-top: 0.5rem;
-      border-top: 1px dashed var(--border-color);
-    }
+.attendance-popup button {
+    flex: 1;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 4px;
+    font-size: 9px;
+    font-weight: 850;
+    cursor: pointer;
+}
 
-    .time-input {
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 0.5rem;
-      padding: 0.4rem 0.6rem;
-      font-size: 0.9rem;
-      font-weight: 600;
-      outline: none;
-    }
+.popup-present {
+    background: var(--green-soft);
+    color: var(--green);
+}
 
-    /* =========================================
-       STATS DASHBOARD
-    ========================================= */
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1rem;
-    }
+.popup-absent {
+    background: var(--red-soft);
+    color: var(--red);
+}
 
-    .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 0.8rem;
-      padding: 1rem;
-      text-align: center;
-    }
+/* =========================================
+   LEGEND
+========================================= */
+.legend {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 10px;
+}
 
-    .stat-value {
-      font-size: 1.5rem;
-      font-weight: 700;
-      margin-top: 0.25rem;
-    }
+.legend-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    margin-right: 4px;
+    border-radius: 50%;
+}
 
-    .stat-label {
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+.legend-green { background: var(--green); }
+.legend-red { background: var(--red); }
 
-    /* =========================================
-       CALENDAR SECTION
-    ========================================= */
-    .calendar-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 1rem;
-      padding: 1.5rem;
-      position: relative;
-    }
+/* =========================================
+   ATTENDANCE CARD
+========================================= */
+.attendance-card {
+    padding: 20px;
+}
 
-    .calendar-grid {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      gap: 0.5rem;
-      margin-top: 1rem;
-      text-align: center;
-    }
+.attendance-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
 
-    .day-name {
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: var(--text-secondary);
-      padding-bottom: 0.5rem;
-    }
+.label {
+    color: var(--muted);
+    font-size: 9px;
+    font-weight: 850;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
 
-    .day-cell {
-      aspect-ratio: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 0.5rem;
-      border: 1px solid var(--border-color);
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      position: relative;
-    }
+.percentage {
+    margin-top: 5px;
+    font-size: 43px;
+    font-weight: 900;
+    letter-spacing: -2px;
+}
 
-    .day-cell:hover {
-      border-color: var(--accent-color);
-    }
+.percentage span {
+    color: var(--muted);
+    font-size: 18px;
+    letter-spacing: 0;
+}
 
-    .day-cell.today-highlight {
-      border: 2px solid var(--accent-color);
-      font-weight: 800;
-    }
+.status {
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 850;
+}
 
-    .day-cell.present {
-      background-color: var(--present-bg);
-      color: var(--present-text);
-      border-color: transparent;
-    }
+.safe {
+    background: var(--green-soft);
+    color: var(--green);
+}
 
-    .day-cell.absent {
-      background-color: var(--absent-bg);
-      color: var(--absent-text);
-      border-color: transparent;
-    }
+.warning {
+    background: #fff5dd;
+    color: #a87816;
+}
 
-    /* Action Popup */
-    .action-popup {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
-      border-radius: 0.8rem;
-      padding: 0.75rem;
-      display: flex;
-      gap: 0.5rem;
-      z-index: 10;
-    }
+body.dark .warning {
+    background: rgba(255, 190, 60, 0.12);
+    color: #ffc85c;
+}
 
-    .btn-action {
-      padding: 0.5rem 0.8rem;
-      border-radius: 0.4rem;
-      border: none;
-      font-weight: 600;
-      cursor: pointer;
-    }
+.danger {
+    background: var(--red-soft);
+    color: var(--red);
+}
 
-    .btn-present { background: #22c55e; color: white; }
-    .btn-absent { background: #ef4444; color: white; }
-    .btn-clear { background: var(--border-color); color: var(--text-primary); }
-  </style>
+.progress {
+    height: 9px;
+    margin: 15px 0;
+    background: var(--soft);
+    border-radius: 100px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--green);
+    border-radius: 100px;
+    transition: width 0.3s ease;
+}
+
+.counters {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9px;
+}
+
+.counter {
+    padding: 12px;
+    background: var(--soft);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+}
+
+.counter strong {
+    display: block;
+    font-size: 18px;
+}
+
+.counter span {
+    color: var(--muted);
+    font-size: 9px;
+}
+
+.tip {
+    margin-top: 12px;
+    padding: 11px 12px;
+    background: var(--purple-soft);
+    color: var(--purple);
+    border-radius: 13px;
+    font-size: 10px;
+    line-height: 1.5;
+    font-weight: 650;
+}
+
+.reset {
+    width: 100%;
+    margin-top: 14px;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: var(--card);
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+}
+</style>
 </head>
+
 <body>
+<div class="app">
 
-  <div class="container">
+    <!-- HEADER -->
     <header>
-      <div class="logo-container">
-        <!-- SVG Animated Attendix Logo -->
-        <svg class="attendix-logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="8" style="color: var(--accent-color)" />
-          <path d="M30 52 L43 65 L70 35" stroke="currentColor" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" style="color: var(--accent-color)" />
-        </svg>
-        <span class="logo-title">Attendix</span>
-      </div>
-
-      <div class="streak-badge">
-        <!-- Animated Flame SVG -->
-        <svg class="fire-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M12 23C16.4183 23 20 19.4183 20 15C20 10.5 16 7 14 3C13.5 6 11.5 8 9.5 8C7 8 5 6 5 6C4 9 4 11.5 4 15C4 19.4183 7.58172 23 12 23Z" fill="#F97316"/>
-          <path d="M12 23C14.2091 23 16 21.2091 16 19C16 16.5 14 14.5 13 12.5C12.5 14 11 15 9.5 15C8 15 7 14 7 14C6.5 15.5 6.5 17 6.5 19C6.5 21.2091 8.79086 23 12 23Z" fill="#FACC15"/>
-        </svg>
-        <span id="streakCount">0</span> Days
-      </div>
-
-      <div class="controls">
-        <button class="btn-icon" id="themeButton" title="Toggle Theme">🌙</button>
-        <button class="btn-icon" id="resetButton" title="Reset History">🔄</button>
-      </div>
+        <div class="brand">
+            <div class="logo">✓</div>
+            <div>
+                <h1>Attendix</h1>
+                <p>Smart attendance tracker</p>
+            </div>
+        </div>
+        <div class="header-buttons">
+            <button class="header-btn" id="todayButton" title="Today">⌾</button>
+            <button class="header-btn" id="themeButton" title="Toggle theme">🌙</button>
+        </div>
     </header>
 
-    <!-- SUBJECT SELECTOR CARD -->
-    <div class="settings-card">
-      <div class="settings-header">
-        <span class="settings-title">📚 Active Subject</span>
-        <select class="time-input" id="subjectSelect">
-          <option value="ALL">🌐 Overall (All Subjects)</option>
-          <option value="SSE">SSE</option>
-          <option value="Maths Foundation">Maths Foundation</option>
-          <option value="Programming">Programming</option>
-          <option value="Language">Language</option>
-          <option value="Creative Thinking">Creative Thinking</option>
-          <option value="Organizational Behaviour">Organizational Behaviour</option>
-          <option value="Sensor and Automation">Sensor and Automation</option>
-          <option value="DD&CO">DD&CO</option>
-          <option value="Mentor Mentee">Mentor Mentee</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- QUICK-MARK TODAY CARD -->
-    <div class="today-card">
-      <div class="today-info">
-        <div class="today-title-row">
-          <span class="today-title">Today's Entry</span>
-          <span class="badge-today" id="todaySubjectBadge">ALL</span>
+    <!-- CALENDAR CARD -->
+    <section class="card calendar-card">
+        <div class="calendar-top">
+            <div>
+                <div class="month" id="monthName"></div>
+                <span class="year" id="year"></span>
+            </div>
+            <div class="month-controls">
+                <button id="previousMonth">‹</button>
+                <button id="nextMonth">›</button>
+            </div>
         </div>
-        <span class="today-date-text" id="todayFormattedDate">Loading date...</span>
-      </div>
-      <div class="today-actions">
-        <button class="btn-quick btn-quick-p" id="quickPresentBtn">
-          ✓ Present
-        </button>
-        <button class="btn-quick btn-quick-a" id="quickAbsentBtn">
-          ✕ Absent
-        </button>
-      </div>
-    </div>
 
-    <!-- DAILY REMINDERS & NOTIFICATION SETTINGS -->
-    <div class="settings-card">
-      <div class="settings-header">
-        <span class="settings-title">🔔 Daily Attendance Reminder</span>
-        <label class="switch">
-          <input type="checkbox" id="notifyToggle">
-          <span class="slider"></span>
-        </label>
-      </div>
-      <div class="time-picker-row" id="timeRow" style="display: none;">
-        <span style="font-size: 0.85rem; color: var(--text-secondary);">Reminder Time</span>
-        <input type="time" class="time-input" id="notifyTime" value="20:00">
-      </div>
-    </div>
-
-    <!-- STATS DASHBOARD -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">Present</div>
-        <div class="stat-value" id="presentCount" style="color: #22c55e;">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Absent</div>
-        <div class="stat-value" id="absentCount" style="color: #ef4444;">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Rate</div>
-        <div class="stat-value" id="attendanceRate">0%</div>
-      </div>
-    </div>
-
-    <!-- CALENDAR -->
-    <div class="calendar-card" id="calendarCard">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <h2 id="monthYear">Month Year</h2>
-        <div class="controls">
-          <button class="btn-icon" id="prevMonthBtn" title="Previous Month">◀</button>
-          <button class="btn-icon" id="nextMonthBtn" title="Next Month">▶</button>
+        <div class="weekdays">
+            <div>S</div><div>M</div><div>T</div><div>W</div><div>T</div><div>F</div><div>S</div>
         </div>
-      </div>
-      <div class="calendar-grid" id="calendar">
-        <!-- Calendar days injected dynamically -->
-      </div>
-    </div>
-  </div>
 
-  <script>
-    /* =========================================
-       SUBJECT LIST & STATE KEYS
-    ========================================= */
-    const SUBJECTS = [
-      "SSE",
-      "Maths Foundation",
-      "Programming",
-      "Language",
-      "Creative Thinking",
-      "Organizational Behaviour",
-      "Sensor and Automation",
-      "DD&CO",
-      "Mentor Mentee"
-    ];
+        <div class="calendar" id="calendar"></div>
 
-    const STORAGE_KEY = "attendix_data_v2";
-    const THEME_KEY = "attendix_theme";
-    const NOTIFY_KEY = "attendix_notify_settings";
-    const ACTIVE_SUBJECT_KEY = "attendix_active_subject";
+        <div class="legend">
+            <span><i class="legend-dot legend-green"></i> Present</span>
+            <span><i class="legend-dot legend-red"></i> Absent</span>
+        </div>
+    </section>
 
-    let rawData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    let attendance = {};
+    <!-- ATTENDANCE SUMMARY -->
+    <section class="card attendance-card">
+        <div class="attendance-header">
+            <div>
+                <div class="label">Overall Attendance</div>
+                <div class="percentage" id="percentage">0<span>%</span></div>
+            </div>
+            <div class="status" id="status">No data</div>
+        </div>
 
-    for (const [date, val] of Object.entries(rawData)) {
-      if (typeof val === "string") {
-        attendance[date] = { "ALL": val };
-      } else {
-        attendance[date] = val;
-      }
+        <div class="progress">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="counters">
+            <div class="counter">
+                <strong id="presentCount">0</strong>
+                <span>Present classes</span>
+            </div>
+            <div class="counter">
+                <strong id="absentCount">0</strong>
+                <span>Absent classes</span>
+            </div>
+        </div>
+
+        <div class="tip" id="tip">Select a date to mark your attendance.</div>
+        <button class="reset" id="resetButton">Reset all attendance</button>
+    </section>
+
+</div>
+
+<script>
+/* =========================================
+   STORAGE & STATE
+========================================= */
+const STORAGE_KEY = "attendixAttendance";
+const THEME_KEY = "attendixTheme";
+
+let attendance = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+let currentDate = new Date();
+let selectedDate = null;
+
+const $ = (id) => document.getElementById(id);
+
+function makeKey(year, month, day) {
+    return `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+}
+
+function saveData() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(attendance));
+}
+
+/* =========================================
+   CALENDAR RENDER
+========================================= */
+function renderCalendar() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    $("monthName").textContent = currentDate.toLocaleString("en-US", { month: "long" });
+    $("year").textContent = year;
+
+    const calendar = $("calendar");
+    calendar.innerHTML = "";
+
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const today = new Date();
+
+    for (let i = 0; i < firstDay; i++) {
+        const empty = document.createElement("div");
+        empty.className = "day";
+        calendar.appendChild(empty);
     }
 
-    let activeSubject = localStorage.getItem(ACTIVE_SUBJECT_KEY) || "ALL";
-    let notifySettings = JSON.parse(localStorage.getItem(NOTIFY_KEY)) || { enabled: false, time: "20:00" };
-    let reminderTimeout = null;
-    let viewDate = new Date();
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateKey = makeKey(year, month, day);
 
-    const $ = (id) => document.getElementById(id);
+        const wrapper = document.createElement("div");
+        wrapper.className = "day-wrapper";
 
-    function getTodayString() {
-      const today = new Date();
-      const yyyy = today.getFullYear();
-      const mm = String(today.getMonth() + 1).padStart(2, '0');
-      const dd = String(today.getDate()).padStart(2, '0');
-      return `${yyyy}-${mm}-${dd}`;
-    }
+        const button = document.createElement("button");
+        button.className = "day";
+        button.innerHTML = `<span>${day}</span>`;
 
-    /* =========================================
-       SUBJECT STATUS HELPERS
-    ========================================= */
-    function getDateStatus(dateStr, subject) {
-      const dateRecords = attendance[dateStr];
-      if (!dateRecords) return null;
-
-      if (subject !== "ALL") {
-        return dateRecords[subject] || null;
-      }
-
-      const statuses = Object.values(dateRecords);
-      if (statuses.length === 0) return null;
-      const pCount = statuses.filter(s => s === "P").length;
-      const aCount = statuses.filter(s => s === "A").length;
-      if (pCount === 0 && aCount === 0) return null;
-      return pCount >= aCount ? "P" : "A";
-    }
-
-    /* =========================================
-       QUICK-MARK TODAY LOGIC
-    ========================================= */
-    function initTodayCard() {
-      const today = new Date();
-      const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
-      $("todayFormattedDate").textContent = today.toLocaleDateString('en-US', options);
-
-      updateTodayCardUI();
-
-      $("quickPresentBtn").onclick = () => toggleTodayStatus('P');
-      $("quickAbsentBtn").onclick = () => toggleTodayStatus('A');
-    }
-
-    function toggleTodayStatus(status) {
-      const todayStr = getTodayString();
-      if (!attendance[todayStr]) {
-        attendance[todayStr] = {};
-      }
-
-      const currentStatus = getDateStatus(todayStr, activeSubject);
-
-      if (activeSubject === "ALL") {
-        if (currentStatus === status) {
-          delete attendance[todayStr];
-        } else {
-          SUBJECTS.forEach(sub => {
-            attendance[todayStr][sub] = status;
-          });
-        }
-      } else {
-        if (currentStatus === status) {
-          delete attendance[todayStr][activeSubject];
-          if (Object.keys(attendance[todayStr]).length === 0) {
-            delete attendance[todayStr];
-          }
-        } else {
-          attendance[todayStr][activeSubject] = status;
-        }
-      }
-
-      saveData();
-      renderCalendar();
-      updateStatistics();
-      updateTodayCardUI();
-    }
-
-    function updateTodayCardUI() {
-      const todayStr = getTodayString();
-      const currentStatus = getDateStatus(todayStr, activeSubject);
-
-      const btnP = $("quickPresentBtn");
-      const btnA = $("quickAbsentBtn");
-
-      btnP.classList.remove("btn-quick-selected");
-      btnA.classList.remove("btn-quick-selected");
-
-      if (currentStatus === 'P') {
-        btnP.classList.add("btn-quick-selected");
-      } else if (currentStatus === 'A') {
-        btnA.classList.add("btn-quick-selected");
-      }
-
-      $("todaySubjectBadge").textContent = activeSubject === "ALL" ? "All Subjects" : activeSubject;
-    }
-
-    /* =========================================
-       DAILY NOTIFICATIONS SYSTEM
-    ========================================= */
-    function initNotificationSettings() {
-      const toggle = $("notifyToggle");
-      const timeInput = $("notifyTime");
-      const timeRow = $("timeRow");
-
-      toggle.checked = notifySettings.enabled;
-      timeInput.value = notifySettings.time || "20:00";
-      timeRow.style.display = notifySettings.enabled ? "flex" : "none";
-
-      toggle.addEventListener("change", async function() {
-        if (this.checked) {
-          const granted = await requestNotificationPermission();
-          if (!granted) {
-            this.checked = false;
-            alert("Notification permission was denied in your browser settings.");
-            return;
-          }
-          notifySettings.enabled = true;
-          timeRow.style.display = "flex";
-        } else {
-          notifySettings.enabled = false;
-          timeRow.style.display = "none";
-        }
-        saveNotificationSettings();
-      });
-
-      timeInput.addEventListener("change", function() {
-        notifySettings.time = this.value;
-        saveNotificationSettings();
-      });
-
-      scheduleDailyReminder();
-    }
-
-    async function requestNotificationPermission() {
-      if (!("Notification" in window)) {
-        alert("This browser does not support desktop notifications.");
-        return false;
-      }
-      if (Notification.permission === "granted") return true;
-      if (Notification.permission !== "denied") {
-        const permission = await Notification.requestPermission();
-        return permission === "granted";
-      }
-      return false;
-    }
-
-    function saveNotificationSettings() {
-      localStorage.setItem(NOTIFY_KEY, JSON.stringify(notifySettings));
-      scheduleDailyReminder();
-    }
-
-    function scheduleDailyReminder() {
-      if (reminderTimeout) clearTimeout(reminderTimeout);
-
-      if (!notifySettings.enabled || Notification.permission !== "granted") return;
-
-      const [hours, minutes] = notifySettings.time.split(":").map(Number);
-      const now = new Date();
-      const scheduledTime = new Date();
-      scheduledTime.setHours(hours, minutes, 0, 0);
-
-      if (now >= scheduledTime) {
-        scheduledTime.setDate(scheduledTime.getDate() + 1);
-      }
-
-      const delay = scheduledTime.getTime() - now.getTime();
-
-      reminderTimeout = setTimeout(() => {
-        sendNotification();
-        scheduleDailyReminder();
-      }, delay);
-    }
-
-    function sendNotification() {
-      const todayStr = getTodayString();
-      if (!attendance[todayStr]) {
-        new Notification("Attendix Reminder 🔥", {
-          body: "Don't forget to mark your attendance for today!",
-          icon: "https://cdn-icons-png.flaticon.com/512/3652/3652191.png"
-        });
-      }
-    }
-
-    /* =========================================
-       CALENDAR RENDER LOGIC
-    ========================================= */
-    function renderCalendar() {
-      const calendarEl = $("calendar");
-      calendarEl.innerHTML = "";
-
-      const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-      daysOfWeek.forEach(day => {
-        const dayHead = document.createElement("div");
-        dayHead.className = "day-name";
-        dayHead.textContent = day;
-        calendarEl.appendChild(dayHead);
-      });
-
-      const year = viewDate.getFullYear();
-      const month = viewDate.getMonth();
-
-      $("monthYear").textContent = viewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-
-      const firstDay = new Date(year, month, 1).getDay();
-      const totalDays = new Date(year, month + 1, 0).getDate();
-      const todayStr = getTodayString();
-
-      for (let i = 0; i < firstDay; i++) {
-        const emptyCell = document.createElement("div");
-        calendarEl.appendChild(emptyCell);
-      }
-
-      for (let day = 1; day <= totalDays; day++) {
-        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        const dayCell = document.createElement("div");
-        dayCell.className = "day-cell";
-        dayCell.textContent = day;
-
-        if (dateStr === todayStr) {
-          dayCell.classList.add("today-highlight");
+        if (attendance[dateKey]) {
+            button.classList.add(attendance[dateKey]);
+            const dot = document.createElement("span");
+            dot.className = "status-dot";
+            button.appendChild(dot);
         }
 
-        const status = getDateStatus(dateStr, activeSubject);
-        if (status === "P") dayCell.classList.add("present");
-        if (status === "A") dayCell.classList.add("absent");
-
-        dayCell.addEventListener("click", (e) => {
-          e.stopPropagation();
-          showActionPopup(dayCell, dateStr);
-        });
-
-        calendarEl.appendChild(dayCell);
-      }
-    }
-
-    function showActionPopup(targetEl, dateStr) {
-      removeExistingPopups();
-
-      const popup = document.createElement("div");
-      popup.className = "action-popup";
-      popup.innerHTML = `
-        <button class="btn-action btn-present" onclick="setAttendance('${dateStr}', 'P')">Present</button>
-        <button class="btn-action btn-absent" onclick="setAttendance('${dateStr}', 'A')">Absent</button>
-        <button class="btn-action btn-clear" onclick="setAttendance('${dateStr}', null)">Clear</button>
-      `;
-
-      targetEl.appendChild(popup);
-    }
-
-    function removeExistingPopups() {
-      document.querySelectorAll(".action-popup").forEach(el => el.remove());
-    }
-
-    /* =========================================
-       ATTENDANCE & STATISTICS ENGINE
-    ========================================= */
-    function setAttendance(dateStr, status) {
-      if (!attendance[dateStr]) {
-        attendance[dateStr] = {};
-      }
-
-      if (status === null) {
-        if (activeSubject === "ALL") {
-          delete attendance[dateStr];
-        } else {
-          delete attendance[dateStr][activeSubject];
-          if (Object.keys(attendance[dateStr]).length === 0) {
-            delete attendance[dateStr];
-          }
+        if (
+            year === today.getFullYear() &&
+            month === today.getMonth() &&
+            day === today.getDate()
+        ) {
+            button.classList.add("today");
         }
-      } else {
-        if (activeSubject === "ALL") {
-          SUBJECTS.forEach(sub => {
-            attendance[dateStr][sub] = status;
-          });
-        } else {
-          attendance[dateStr][activeSubject] = status;
+
+        if (dateKey === selectedDate) {
+            button.classList.add("selected");
+            wrapper.classList.add("active");
         }
-      }
 
-      saveData();
-      renderCalendar();
-      updateStatistics();
-      updateTodayCardUI();
+        const popup = document.createElement("div");
+        popup.className = "attendance-popup";
+
+        const present = document.createElement("button");
+        present.className = "popup-present";
+        present.textContent = "✓ Present";
+        present.onclick = (e) => {
+            e.stopPropagation();
+            markAttendance(dateKey, "present");
+        };
+
+        const absent = document.createElement("button");
+        absent.className = "popup-absent";
+        absent.textContent = "✕ Absent";
+        absent.onclick = (e) => {
+            e.stopPropagation();
+            markAttendance(dateKey, "absent");
+        };
+
+        popup.appendChild(present);
+        popup.appendChild(absent);
+        wrapper.appendChild(button);
+        wrapper.appendChild(popup);
+        calendar.appendChild(wrapper);
+
+        button.onclick = (e) => {
+            e.stopPropagation();
+            selectedDate = (selectedDate === dateKey) ? null : dateKey;
+            renderCalendar();
+        };
     }
+}
 
-    function saveData() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(attendance));
-    }
-
-    function updateStatistics() {
-      let presentCount = 0;
-      let absentCount = 0;
-
-      for (const record of Object.values(attendance)) {
-        if (activeSubject === "ALL") {
-          for (const status of Object.values(record)) {
-            if (status === "P") presentCount++;
-            if (status === "A") absentCount++;
-          }
-        } else {
-          const status = record[activeSubject];
-          if (status === "P") presentCount++;
-          if (status === "A") absentCount++;
-        }
-      }
-
-      const totalRecorded = presentCount + absentCount;
-
-      $("presentCount").textContent = presentCount;
-      $("absentCount").textContent = absentCount;
-      
-      const rate = totalRecorded > 0 ? Math.round((presentCount / totalRecorded) * 100) : 0;
-      $("attendanceRate").textContent = `${rate}%`;
-
-      let streak = 0;
-      let checkDate = new Date();
-      
-      while (true) {
-        const yyyy = checkDate.getFullYear();
-        const mm = String(checkDate.getMonth() + 1).padStart(2, '0');
-        const dd = String(checkDate.getDate()).padStart(2, '0');
-        const dateStr = `${yyyy}-${mm}-${dd}`;
-        const status = getDateStatus(dateStr, activeSubject);
-
-        if (status === "P") {
-          streak++;
-          checkDate.setDate(checkDate.getDate() - 1);
-        } else if (dateStr === getTodayString() && !status) {
-          checkDate.setDate(checkDate.getDate() - 1);
-        } else {
-          break;
-        }
-      }
-      
-      $("streakCount").textContent = streak;
-    }
-
-    /* =========================================
-       SUBJECT SELECTOR EVENT
-    ========================================= */
-    const subjectSelect = $("subjectSelect");
-    subjectSelect.value = activeSubject;
-
-    subjectSelect.addEventListener("change", function() {
-      activeSubject = this.value;
-      localStorage.setItem(ACTIVE_SUBJECT_KEY, activeSubject);
-      renderCalendar();
-      updateStatistics();
-      updateTodayCardUI();
-    });
-
-    /* =========================================
-       THEME & SYSTEM CONTROLS
-    ========================================= */
-    function updateThemeIcon() {
-      const isDark = document.body.classList.contains("dark");
-      $("themeButton").textContent = isDark ? "☀️" : "🌙";
-    }
-
-    const savedTheme = localStorage.getItem(THEME_KEY);
-    if (savedTheme === "dark") {
-      document.body.classList.add("dark");
-    }
-    updateThemeIcon();
-
-    $("themeButton").addEventListener("click", function() {
-      document.body.classList.toggle("dark");
-      const isDark = document.body.classList.contains("dark");
-      localStorage.setItem(THEME_KEY, isDark ? "dark" : "light");
-      updateThemeIcon();
-    });
-
-    $("resetButton").addEventListener("click", function() {
-      const targetText = activeSubject === "ALL" ? "all subjects" : activeSubject;
-      if (confirm(`Are you sure you want to clear attendance history for ${targetText}?`)) {
-        if (activeSubject === "ALL") {
-          attendance = {};
-        } else {
-          for (const dateStr of Object.keys(attendance)) {
-            delete attendance[dateStr][activeSubject];
-            if (Object.keys(attendance[dateStr]).length === 0) {
-              delete attendance[dateStr];
-            }
-          }
-        }
-        saveData();
-        renderCalendar();
-        updateStatistics();
-        updateTodayCardUI();
-      }
-    });
-
-    $("prevMonthBtn").addEventListener("click", () => {
-      viewDate.setMonth(viewDate.getMonth() - 1);
-      renderCalendar();
-    });
-
-    $("nextMonthBtn").addEventListener("click", () => {
-      viewDate.setMonth(viewDate.getMonth() + 1);
-      renderCalendar();
-    });
-
-    document.addEventListener("click", function(event) {
-      if (!event.target.closest("#calendar")) {
-        removeExistingPopups();
-      }
-    });
-
-    /* =========================================
-       INITIALIZATION
-    ========================================= */
-    initTodayCard();
-    initNotificationSettings();
+function markAttendance(dateKey, status) {
+    attendance[dateKey] = status;
+    selectedDate = dateKey;
+    saveData();
     renderCalendar();
     updateStatistics();
-  </script>
+}
+
+/* =========================================
+   STATISTICS
+========================================= */
+function updateStatistics() {
+    const values = Object.values(attendance);
+    const present = values.filter(v => v === "present").length;
+    const absent = values.filter(v => v === "absent").length;
+    const total = present + absent;
+
+    const percentage = total > 0 ? (present / total) * 100 : 0;
+
+    $("presentCount").textContent = present;
+    $("absentCount").textContent = absent;
+    $("percentage").innerHTML = `${total ? percentage.toFixed(1) : "0"}<span>%</span>`;
+    $("progressFill").style.width = `${percentage}%`;
+
+    const status = $("status");
+    status.className = "status";
+
+    if (total === 0) {
+        status.textContent = "No data";
+        $("tip").textContent = "Select a date to mark your attendance.";
+    } else if (percentage >= 75) {
+        status.textContent = "✓ Safe";
+        status.classList.add("safe");
+        $("tip").textContent = "Great! Your attendance is above the 75% target.";
+    } else if (percentage >= 60) {
+        status.textContent = "⚠ Attention";
+        status.classList.add("warning");
+        $("tip").textContent = "Your attendance is getting close to the 75% target.";
+    } else {
+        status.textContent = "✕ Low";
+        status.classList.add("danger");
+        $("tip").textContent = "Your attendance is below 75%. Try to attend upcoming classes.";
+    }
+}
+
+/* =========================================
+   CONTROLS & LISTENERS
+========================================= */
+$("previousMonth").onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() - 1);
+    selectedDate = null;
+    renderCalendar();
+};
+
+$("nextMonth").onclick = () => {
+    currentDate.setMonth(currentDate.getMonth() + 1);
+    selectedDate = null;
+    renderCalendar();
+};
+
+$("todayButton").onclick = () => {
+    currentDate = new Date();
+    selectedDate = null;
+    renderCalendar();
+};
+
+function updateThemeIcon() {
+    $("themeButton").textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+}
+
+if (localStorage.getItem(THEME_KEY) === "dark") {
+    document.body.classList.add("dark");
+}
+updateThemeIcon();
+
+$("themeButton").onclick = () => {
+    document.body.classList.toggle("dark");
+    localStorage.setItem(THEME_KEY, document.body.classList.contains("dark") ? "dark" : "light");
+    updateThemeIcon();
+};
+
+$("resetButton").onclick = () => {
+    if (confirm("Reset all attendance data?")) {
+        attendance = {};
+        selectedDate = null;
+        localStorage.removeItem(STORAGE_KEY);
+        renderCalendar();
+        updateStatistics();
+    }
+};
+
+document.onclick = () => {
+    if (selectedDate !== null) {
+        selectedDate = null;
+        renderCalendar();
+    }
+};
+
+/* =========================================
+   INIT
+========================================= */
+renderCalendar();
+updateStatistics();
+</script>
 </body>
 </html>
