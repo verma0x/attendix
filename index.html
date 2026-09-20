@@ -487,17 +487,20 @@
     </header>
 
     <!-- SUBJECT SELECTOR CARD -->
-    <div class="today-card">
-      <div class="today-info">
-        <div class="today-title-row">
-          <span class="today-title">Subject</span>
-          <span class="badge-today">Active</span>
-        </div>
-        <span class="today-date-text">Select course to track</span>
-      </div>
-      <div class="today-actions">
-        <select id="subjectSelect" class="time-input" style="font-size: 0.95rem; font-weight: 700; cursor: pointer; max-width: 220px;">
-          <!-- Injected via JavaScript -->
+    <div class="settings-card">
+      <div class="settings-header">
+        <span class="settings-title">📚 Active Subject</span>
+        <select class="time-input" id="subjectSelect">
+          <option value="ALL">🌐 Overall (All Subjects)</option>
+          <option value="SSE">SSE</option>
+          <option value="Maths Foundation">Maths Foundation</option>
+          <option value="Programming">Programming</option>
+          <option value="Language">Language</option>
+          <option value="Creative Thinking">Creative Thinking</option>
+          <option value="Organizational Behaviour">Organizational Behaviour</option>
+          <option value="Sensor and Automation">Sensor and Automation</option>
+          <option value="DD&CO">DD&CO</option>
+          <option value="Mentor Mentee">Mentor Mentee</option>
         </select>
       </div>
     </div>
@@ -506,8 +509,8 @@
     <div class="today-card">
       <div class="today-info">
         <div class="today-title-row">
-          <span class="today-title" id="todayCardTitle">Today's Entry</span>
-          <span class="badge-today">Today</span>
+          <span class="today-title">Today's Entry</span>
+          <span class="badge-today" id="todaySubjectBadge">ALL</span>
         </div>
         <span class="today-date-text" id="todayFormattedDate">Loading date...</span>
       </div>
@@ -569,10 +572,9 @@
 
   <script>
     /* =========================================
-       SUBJECT CONFIGURATION & STORAGE
+       SUBJECT LIST & STATE KEYS
     ========================================= */
     const SUBJECTS = [
-      "All Subjects (Overview)",
       "SSE",
       "Maths Foundation",
       "Programming",
@@ -587,14 +589,22 @@
     const STORAGE_KEY = "attendix_data_v2";
     const THEME_KEY = "attendix_theme";
     const NOTIFY_KEY = "attendix_notify_settings";
-    const CURRENT_SUBJ_KEY = "attendix_current_subject";
-    
-    // Structure: { "SSE": { "YYYY-MM-DD": "P" }, "DD&CO": { ... } }
-    let attendance = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-    let notifySettings = JSON.parse(localStorage.getItem(NOTIFY_KEY)) || { enabled: false, time: "20:00" };
-    let currentSubject = localStorage.getItem(CURRENT_SUBJ_KEY) || SUBJECTS[1]; // Default to 'SSE'
-    let reminderTimeout = null;
+    const ACTIVE_SUBJECT_KEY = "attendix_active_subject";
 
+    let rawData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+    let attendance = {};
+
+    for (const [date, val] of Object.entries(rawData)) {
+      if (typeof val === "string") {
+        attendance[date] = { "ALL": val };
+      } else {
+        attendance[date] = val;
+      }
+    }
+
+    let activeSubject = localStorage.getItem(ACTIVE_SUBJECT_KEY) || "ALL";
+    let notifySettings = JSON.parse(localStorage.getItem(NOTIFY_KEY)) || { enabled: false, time: "20:00" };
+    let reminderTimeout = null;
     let viewDate = new Date();
 
     const $ = (id) => document.getElementById(id);
@@ -608,27 +618,22 @@
     }
 
     /* =========================================
-       SUBJECT SELECTOR SETUP
+       SUBJECT STATUS HELPERS
     ========================================= */
-    function initSubjectSelector() {
-      const select = $("subjectSelect");
-      select.innerHTML = "";
+    function getDateStatus(dateStr, subject) {
+      const dateRecords = attendance[dateStr];
+      if (!dateRecords) return null;
 
-      SUBJECTS.forEach(subj => {
-        const opt = document.createElement("option");
-        opt.value = subj;
-        opt.textContent = subj;
-        if (subj === currentSubject) opt.selected = true;
-        select.appendChild(opt);
-      });
+      if (subject !== "ALL") {
+        return dateRecords[subject] || null;
+      }
 
-      select.addEventListener("change", function() {
-        currentSubject = this.value;
-        localStorage.setItem(CURRENT_SUBJ_KEY, currentSubject);
-        updateTodayCardUI();
-        renderCalendar();
-        updateStatistics();
-      });
+      const statuses = Object.values(dateRecords);
+      if (statuses.length === 0) return null;
+      const pCount = statuses.filter(s => s === "P").length;
+      const aCount = statuses.filter(s => s === "A").length;
+      if (pCount === 0 && aCount === 0) return null;
+      return pCount >= aCount ? "P" : "A";
     }
 
     /* =========================================
@@ -646,20 +651,30 @@
     }
 
     function toggleTodayStatus(status) {
-      if (currentSubject === SUBJECTS[0]) {
-        alert("Please pick an individual subject to mark attendance!");
-        return;
-      }
-
       const todayStr = getTodayString();
-      if (!attendance[currentSubject]) {
-        attendance[currentSubject] = {};
+      if (!attendance[todayStr]) {
+        attendance[todayStr] = {};
       }
 
-      if (attendance[currentSubject][todayStr] === status) {
-        delete attendance[currentSubject][todayStr];
+      const currentStatus = getDateStatus(todayStr, activeSubject);
+
+      if (activeSubject === "ALL") {
+        if (currentStatus === status) {
+          delete attendance[todayStr];
+        } else {
+          SUBJECTS.forEach(sub => {
+            attendance[todayStr][sub] = status;
+          });
+        }
       } else {
-        attendance[currentSubject][todayStr] = status;
+        if (currentStatus === status) {
+          delete attendance[todayStr][activeSubject];
+          if (Object.keys(attendance[todayStr]).length === 0) {
+            delete attendance[todayStr];
+          }
+        } else {
+          attendance[todayStr][activeSubject] = status;
+        }
       }
 
       saveData();
@@ -669,8 +684,8 @@
     }
 
     function updateTodayCardUI() {
-      const isAll = currentSubject === SUBJECTS[0];
-      $("todayCardTitle").textContent = isAll ? "Today's Status" : `${currentSubject}`;
+      const todayStr = getTodayString();
+      const currentStatus = getDateStatus(todayStr, activeSubject);
 
       const btnP = $("quickPresentBtn");
       const btnA = $("quickAbsentBtn");
@@ -678,23 +693,13 @@
       btnP.classList.remove("btn-quick-selected");
       btnA.classList.remove("btn-quick-selected");
 
-      if (isAll) {
-        btnP.style.opacity = "0.4";
-        btnA.style.opacity = "0.4";
-        return;
-      }
-
-      btnP.style.opacity = "1";
-      btnA.style.opacity = "1";
-
-      const todayStr = getTodayString();
-      const currentStatus = attendance[currentSubject] ? attendance[currentSubject][todayStr] : null;
-
       if (currentStatus === 'P') {
         btnP.classList.add("btn-quick-selected");
       } else if (currentStatus === 'A') {
         btnA.classList.add("btn-quick-selected");
       }
+
+      $("todaySubjectBadge").textContent = activeSubject === "ALL" ? "All Subjects" : activeSubject;
     }
 
     /* =========================================
@@ -754,6 +759,7 @@
 
     function scheduleDailyReminder() {
       if (reminderTimeout) clearTimeout(reminderTimeout);
+
       if (!notifySettings.enabled || Notification.permission !== "granted") return;
 
       const [hours, minutes] = notifySettings.time.split(":").map(Number);
@@ -775,19 +781,9 @@
 
     function sendNotification() {
       const todayStr = getTodayString();
-      let hasUnmarked = false;
-
-      for (let i = 1; i < SUBJECTS.length; i++) {
-        const sub = SUBJECTS[i];
-        if (!attendance[sub] || !attendance[sub][todayStr]) {
-          hasUnmarked = true;
-          break;
-        }
-      }
-
-      if (hasUnmarked) {
+      if (!attendance[todayStr]) {
         new Notification("Attendix Reminder 🔥", {
-          body: "Don't forget to mark your attendance for today's subjects!",
+          body: "Don't forget to mark your attendance for today!",
           icon: "https://cdn-icons-png.flaticon.com/512/3652/3652191.png"
         });
       }
@@ -832,30 +828,12 @@
           dayCell.classList.add("today-highlight");
         }
 
-        const isAll = currentSubject === SUBJECTS[0];
-
-        if (isAll) {
-          let hasPresent = false;
-          let hasAbsent = false;
-          for (let s = 1; s < SUBJECTS.length; s++) {
-            const st = attendance[SUBJECTS[s]]?.[dateStr];
-            if (st === "P") hasPresent = true;
-            if (st === "A") hasAbsent = true;
-          }
-          if (hasPresent && !hasAbsent) dayCell.classList.add("present");
-          else if (hasAbsent) dayCell.classList.add("absent");
-        } else {
-          const st = attendance[currentSubject]?.[dateStr];
-          if (st === "P") dayCell.classList.add("present");
-          if (st === "A") dayCell.classList.add("absent");
-        }
+        const status = getDateStatus(dateStr, activeSubject);
+        if (status === "P") dayCell.classList.add("present");
+        if (status === "A") dayCell.classList.add("absent");
 
         dayCell.addEventListener("click", (e) => {
           e.stopPropagation();
-          if (currentSubject === SUBJECTS[0]) {
-            alert("Switch to a specific subject to mark or change individual day attendance.");
-            return;
-          }
           showActionPopup(dayCell, dateStr);
         });
 
@@ -885,14 +863,27 @@
        ATTENDANCE & STATISTICS ENGINE
     ========================================= */
     function setAttendance(dateStr, status) {
-      if (!attendance[currentSubject]) {
-        attendance[currentSubject] = {};
+      if (!attendance[dateStr]) {
+        attendance[dateStr] = {};
       }
 
       if (status === null) {
-        delete attendance[currentSubject][dateStr];
+        if (activeSubject === "ALL") {
+          delete attendance[dateStr];
+        } else {
+          delete attendance[dateStr][activeSubject];
+          if (Object.keys(attendance[dateStr]).length === 0) {
+            delete attendance[dateStr];
+          }
+        }
       } else {
-        attendance[currentSubject][dateStr] = status;
+        if (activeSubject === "ALL") {
+          SUBJECTS.forEach(sub => {
+            attendance[dateStr][sub] = status;
+          });
+        } else {
+          attendance[dateStr][activeSubject] = status;
+        }
       }
 
       saveData();
@@ -909,22 +900,17 @@
       let presentCount = 0;
       let absentCount = 0;
 
-      const isAll = currentSubject === SUBJECTS[0];
-
-      if (isAll) {
-        for (let s = 1; s < SUBJECTS.length; s++) {
-          const subData = attendance[SUBJECTS[s]] || {};
-          Object.values(subData).forEach(val => {
-            if (val === "P") presentCount++;
-            if (val === "A") absentCount++;
-          });
+      for (const record of Object.values(attendance)) {
+        if (activeSubject === "ALL") {
+          for (const status of Object.values(record)) {
+            if (status === "P") presentCount++;
+            if (status === "A") absentCount++;
+          }
+        } else {
+          const status = record[activeSubject];
+          if (status === "P") presentCount++;
+          if (status === "A") absentCount++;
         }
-      } else {
-        const subData = attendance[currentSubject] || {};
-        Object.values(subData).forEach(val => {
-          if (val === "P") presentCount++;
-          if (val === "A") absentCount++;
-        });
       }
 
       const totalRecorded = presentCount + absentCount;
@@ -935,47 +921,42 @@
       const rate = totalRecorded > 0 ? Math.round((presentCount / totalRecorded) * 100) : 0;
       $("attendanceRate").textContent = `${rate}%`;
 
-      // Streak calculation
       let streak = 0;
       let checkDate = new Date();
-
+      
       while (true) {
         const yyyy = checkDate.getFullYear();
         const mm = String(checkDate.getMonth() + 1).padStart(2, '0');
         const dd = String(checkDate.getDate()).padStart(2, '0');
         const dateStr = `${yyyy}-${mm}-${dd}`;
+        const status = getDateStatus(dateStr, activeSubject);
 
-        let isPresent = false;
-        let isUnmarked = false;
-
-        if (isAll) {
-          let anyP = false;
-          let anyA = false;
-          for (let s = 1; s < SUBJECTS.length; s++) {
-            const st = attendance[SUBJECTS[s]]?.[dateStr];
-            if (st === "P") anyP = true;
-            if (st === "A") anyA = true;
-          }
-          isPresent = anyP && !anyA;
-          isUnmarked = !anyP && !anyA;
-        } else {
-          const st = attendance[currentSubject]?.[dateStr];
-          isPresent = st === "P";
-          isUnmarked = !st;
-        }
-
-        if (isPresent) {
+        if (status === "P") {
           streak++;
           checkDate.setDate(checkDate.getDate() - 1);
-        } else if (dateStr === getTodayString() && isUnmarked) {
+        } else if (dateStr === getTodayString() && !status) {
           checkDate.setDate(checkDate.getDate() - 1);
         } else {
           break;
         }
       }
-
+      
       $("streakCount").textContent = streak;
     }
+
+    /* =========================================
+       SUBJECT SELECTOR EVENT
+    ========================================= */
+    const subjectSelect = $("subjectSelect");
+    subjectSelect.value = activeSubject;
+
+    subjectSelect.addEventListener("change", function() {
+      activeSubject = this.value;
+      localStorage.setItem(ACTIVE_SUBJECT_KEY, activeSubject);
+      renderCalendar();
+      updateStatistics();
+      updateTodayCardUI();
+    });
 
     /* =========================================
        THEME & SYSTEM CONTROLS
@@ -999,16 +980,17 @@
     });
 
     $("resetButton").addEventListener("click", function() {
-      const isAll = currentSubject === SUBJECTS[0];
-      const msg = isAll 
-        ? "Are you sure you want to clear ALL attendance records across all subjects?"
-        : `Are you sure you want to clear attendance records for "${currentSubject}"?`;
-
-      if (confirm(msg)) {
-        if (isAll) {
+      const targetText = activeSubject === "ALL" ? "all subjects" : activeSubject;
+      if (confirm(`Are you sure you want to clear attendance history for ${targetText}?`)) {
+        if (activeSubject === "ALL") {
           attendance = {};
         } else {
-          delete attendance[currentSubject];
+          for (const dateStr of Object.keys(attendance)) {
+            delete attendance[dateStr][activeSubject];
+            if (Object.keys(attendance[dateStr]).length === 0) {
+              delete attendance[dateStr];
+            }
+          }
         }
         saveData();
         renderCalendar();
@@ -1036,7 +1018,6 @@
     /* =========================================
        INITIALIZATION
     ========================================= */
-    initSubjectSelector();
     initTodayCard();
     initNotificationSettings();
     renderCalendar();
