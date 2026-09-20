@@ -149,6 +149,42 @@ header {
 }
 
 /* =========================================
+   SUBJECT SELECTOR CARD
+========================================= */
+.subject-card {
+    padding: 14px 18px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.subject-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.subject-select {
+    flex: 1;
+    max-width: 250px;
+    padding: 8px 12px;
+    background: var(--soft);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    font-size: 11px;
+    font-weight: 750;
+    outline: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+/* =========================================
    CALENDAR CARD
 ========================================= */
 .calendar-card {
@@ -496,6 +532,23 @@ body.dark .warning {
         </div>
     </header>
 
+    <!-- SUBJECT SELECTOR -->
+    <section class="card subject-card">
+        <span class="subject-label">Subject</span>
+        <select class="subject-select" id="subjectSelect">
+            <option value="ALL">All Subjects (Overall)</option>
+            <option value="SSE">SSE</option>
+            <option value="Maths Foundation">Maths Foundation</option>
+            <option value="Programming">Programming</option>
+            <option value="Language">Language</option>
+            <option value="Creative Thinking">Creative Thinking</option>
+            <option value="Organizational Behaviour">Organizational Behaviour</option>
+            <option value="Sensor and Automation">Sensor and Automation</option>
+            <option value="DD&CO">DD&CO</option>
+            <option value="Mentor Mentee">Mentor Mentee</option>
+        </select>
+    </section>
+
     <!-- CALENDAR CARD -->
     <section class="card calendar-card">
         <div class="calendar-top">
@@ -525,7 +578,7 @@ body.dark .warning {
     <section class="card attendance-card">
         <div class="attendance-header">
             <div>
-                <div class="label">Overall Attendance</div>
+                <div class="label" id="attendanceSummaryLabel">Overall Attendance</div>
                 <div class="percentage" id="percentage">0<span>%</span></div>
             </div>
             <div class="status" id="status">No data</div>
@@ -547,7 +600,7 @@ body.dark .warning {
         </div>
 
         <div class="tip" id="tip">Select a date to mark your attendance.</div>
-        <button class="reset" id="resetButton">Reset all attendance</button>
+        <button class="reset" id="resetButton">Reset attendance data</button>
     </section>
 
 </div>
@@ -556,10 +609,25 @@ body.dark .warning {
 /* =========================================
    STORAGE & STATE
 ========================================= */
-const STORAGE_KEY = "attendixAttendance";
-const THEME_KEY = "attendixTheme";
+const SUBJECTS = [
+    "SSE",
+    "Maths Foundation",
+    "Programming",
+    "Language",
+    "Creative Thinking",
+    "Organizational Behaviour",
+    "Sensor and Automation",
+    "DD&CO",
+    "Mentor Mentee"
+];
 
+const STORAGE_KEY = "attendixAttendance_v2";
+const THEME_KEY = "attendixTheme";
+const ACTIVE_SUB_KEY = "attendixActiveSubject";
+
+// Schema: { "YYYY-MM-DD": { "SubjectName": "present" | "absent" } }
 let attendance = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+let activeSubject = localStorage.getItem(ACTIVE_SUB_KEY) || "ALL";
 let currentDate = new Date();
 let selectedDate = null;
 
@@ -571,6 +639,27 @@ function makeKey(year, month, day) {
 
 function saveData() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(attendance));
+}
+
+/* =========================================
+   SUBJECT HELPERS
+========================================= */
+function getStatus(dateKey, subject) {
+    const dayObj = attendance[dateKey];
+    if (!dayObj) return null;
+
+    if (subject !== "ALL") {
+        return dayObj[subject] || null;
+    }
+
+    const statuses = Object.values(dayObj);
+    if (statuses.length === 0) return null;
+
+    const presentCount = statuses.filter(s => s === "present").length;
+    const absentCount = statuses.filter(s => s === "absent").length;
+
+    if (presentCount === 0 && absentCount === 0) return null;
+    return presentCount >= absentCount ? "present" : "absent";
 }
 
 /* =========================================
@@ -606,8 +695,10 @@ function renderCalendar() {
         button.className = "day";
         button.innerHTML = `<span>${day}</span>`;
 
-        if (attendance[dateKey]) {
-            button.classList.add(attendance[dateKey]);
+        const dayStatus = getStatus(dateKey, activeSubject);
+
+        if (dayStatus) {
+            button.classList.add(dayStatus);
             const dot = document.createElement("span");
             dot.className = "status-dot";
             button.appendChild(dot);
@@ -660,7 +751,18 @@ function renderCalendar() {
 }
 
 function markAttendance(dateKey, status) {
-    attendance[dateKey] = status;
+    if (!attendance[dateKey]) {
+        attendance[dateKey] = {};
+    }
+
+    if (activeSubject === "ALL") {
+        SUBJECTS.forEach(sub => {
+            attendance[dateKey][sub] = status;
+        });
+    } else {
+        attendance[dateKey][activeSubject] = status;
+    }
+
     selectedDate = dateKey;
     saveData();
     renderCalendar();
@@ -671,13 +773,26 @@ function markAttendance(dateKey, status) {
    STATISTICS
 ========================================= */
 function updateStatistics() {
-    const values = Object.values(attendance);
-    const present = values.filter(v => v === "present").length;
-    const absent = values.filter(v => v === "absent").length;
-    const total = present + absent;
+    let present = 0;
+    let absent = 0;
 
+    for (const dayRecords of Object.values(attendance)) {
+        if (activeSubject === "ALL") {
+            for (const status of Object.values(dayRecords)) {
+                if (status === "present") present++;
+                if (status === "absent") absent++;
+            }
+        } else {
+            const status = dayRecords[activeSubject];
+            if (status === "present") present++;
+            if (status === "absent") absent++;
+        }
+    }
+
+    const total = present + absent;
     const percentage = total > 0 ? (present / total) * 100 : 0;
 
+    $("attendanceSummaryLabel").textContent = activeSubject === "ALL" ? "Overall Attendance" : `${activeSubject} Attendance`;
     $("presentCount").textContent = present;
     $("absentCount").textContent = absent;
     $("percentage").innerHTML = `${total ? percentage.toFixed(1) : "0"}<span>%</span>`;
@@ -703,6 +818,20 @@ function updateStatistics() {
         $("tip").textContent = "Your attendance is below 75%. Try to attend upcoming classes.";
     }
 }
+
+/* =========================================
+   SUBJECT SELECT EVENT
+========================================= */
+const subjectSelect = $("subjectSelect");
+subjectSelect.value = activeSubject;
+
+subjectSelect.onchange = function() {
+    activeSubject = this.value;
+    localStorage.setItem(ACTIVE_SUB_KEY, activeSubject);
+    selectedDate = null;
+    renderCalendar();
+    updateStatistics();
+};
 
 /* =========================================
    CONTROLS & LISTENERS
@@ -741,10 +870,20 @@ $("themeButton").onclick = () => {
 };
 
 $("resetButton").onclick = () => {
-    if (confirm("Reset all attendance data?")) {
-        attendance = {};
+    const label = activeSubject === "ALL" ? "all attendance data" : `data for ${activeSubject}`;
+    if (confirm(`Reset ${label}?`)) {
+        if (activeSubject === "ALL") {
+            attendance = {};
+        } else {
+            for (const dateKey of Object.keys(attendance)) {
+                delete attendance[dateKey][activeSubject];
+                if (Object.keys(attendance[dateKey]).length === 0) {
+                    delete attendance[dateKey];
+                }
+            }
+        }
         selectedDate = null;
-        localStorage.removeItem(STORAGE_KEY);
+        saveData();
         renderCalendar();
         updateStatistics();
     }
